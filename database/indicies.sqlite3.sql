@@ -1,0 +1,9 @@
+CREATE INDEX "idx_visits_case_id" ON "visits" (`case_id`);
+CREATE INDEX "idx_visits_discipline_id" ON "visits" (`discipline_id`);
+CREATE INDEX "idx_visits_hospital_id" ON "visits" (`hospital_id`);
+CREATE INDEX "idx_visits_station_id" ON "visits" (`station_id`);
+CREATE INDEX "idx_visits_substance_id" ON "visits" (`substance_id`);
+CREATE INDEX "idx_visits_user_id" ON "visits" (`user_id`);
+CREATE INDEX "idx_visits_visit_type_id" ON "visits" (`visit_type_id`);
+CREATE INDEX "idx_cases_case_type_id" ON "cases" (`case_type_id`);
+CREATE INDEX "idx_visit_fields_visit_id" ON "visit_fields" (`visit_id`);

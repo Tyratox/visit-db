@@ -1,7 +1,31 @@
 {
-  "name": "visit-db",
-  "version": "1.0.0",
-  "main": "src/index.js",
-  "author": "Tyratox",
-  "license": "UNLICENSED"
+	"name": "visit-db",
+	"version": "1.0.0",
+	"main": "src/index.js",
+	"author": "Tyratox",
+	"license": "UNLICENSED",
+	"bin": "src/index.js",
+	"devDependencies": {
+		"eslint": "^4.10.0",
+		"pkg": "^4.2.5",
+		"typescript": "^2.5.3"
+	},
+	"scripts": {
+		"start": "node src/index.js",
+		"nexe": "nexe src/index.js",
+		"build": "pkg --out-path build/ package.json"
+	},
+	"dependencies": {
+		"body-parser": "^1.18.2",
+		"compression": "^1.7.1",
+		"ejs": "^2.5.7",
+		"express": "^4.16.2",
+		"express-session": "^1.15.6",
+		"helmet": "^3.9.0",
+		"sqlite3": "^3.1.13",
+		"winston": "^2.4.0"
+	},
+	"pkg": {
+		"assets": ["static/*", "src/templates/**/*.ejs"]
+	}
 }
