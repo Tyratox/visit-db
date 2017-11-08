@@ -75,6 +75,10 @@ const prepareTemplate = path => {
 };
 
 app.use("/static", express.static(path.resolve(__dirname, "../static")));
+app.use(
+	"/bower_components",
+	express.static(path.resolve(__dirname, "../bower_components"))
+);
 
 const setupRouting = async () => {
 	app.get("/", async (request, response) => {
@@ -82,7 +86,12 @@ const setupRouting = async () => {
 			path.resolve(__dirname, "templates", "pages", "index.ejs")
 		);
 		response.header("Content-Type", "text/html");
-		response.end(indexTemplate({}));
+
+		db.all("SELECT name FROM stations", (err, rows) => {
+			const stations = rows.map(row => row.name);
+
+			response.end(indexTemplate({ stations: ["711", "712"] }));
+		});
 	});
 };
 

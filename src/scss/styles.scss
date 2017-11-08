@@ -1,0 +1,113 @@
+@import "../../bower_components/bootstrap/scss/bootstrap.scss";
+@import "../../bower_components/awesomplete/awesomplete.css";
+
+body > main {
+	margin-top: 1rem;
+}
+
+/*form section {
+}*/
+
+.awesomplete {
+	display: block;
+}
+
+.awesomplete > ul {
+	border-radius: 0.2rem;
+	margin: 0.2rem 0 0;
+	background: #fff;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	box-shadow: 0.05rem 0.1rem 0.1rem rgba(0, 0, 0, 0.2);
+	text-shadow: none;
+}
+
+.awesomplete > ul {
+	transition: 0.3s cubic-bezier(0.4, 0.2, 0.5, 1.4);
+	transform-origin: 1.43rem -0.43rem;
+}
+
+.awesomplete > ul[hidden],
+.awesomplete > ul:empty {
+	opacity: 0;
+	transform: scale(0);
+	display: block;
+	transition-timing-function: ease;
+}
+
+/* Pointer */
+.awesomplete > ul:before {
+	content: "";
+	position: absolute;
+	top: -0.43rem;
+	left: 1em;
+	width: 0;
+	height: 0;
+	padding: 0.4rem;
+	background: #fff;
+	border: inherit;
+	border-right: 0;
+	border-bottom: 0;
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+.awesomplete > ul > li {
+	position: relative;
+	padding: 0.2rem 0.5rem;
+	cursor: pointer;
+}
+
+.awesomplete > ul > li:hover {
+	background: rgba(0, 0, 0, 0.05);
+}
+
+.awesomplete > ul > li[aria-selected="true"] {
+	background: rgba($brand-primary, 0.5);
+	color: #fff;
+}
+
+.awesomplete mark {
+	background: rgba($brand-primary, 0.2);
+}
+
+.awesomplete li:hover mark {
+	background: rgba($brand-primary, 0.2);
+}
+
+.awesomplete li[aria-selected="true"] mark {
+	background: $brand-primary;
+	color: inherit;
+}
+
+.parsley-errors-list {
+	position: relative !important;
+
+	margin-top: 0.5rem !important;
+	padding: 0.5rem !important;
+
+	border-radius: 3px !important;
+	box-shadow: none !important;
+	border: none !important;
+	background-color: $brand-warning !important;
+	color: #fff !important;
+
+	&:before {
+		display: none;
+	}
+
+	ul,
+	li {
+		list-style: none;
+		padding: 0 !important;
+	}
+
+	li {
+		border-bottom: #fff 1px solid;
+		margin-bottom: 0.5rem;
+	}
+
+	li:last-child {
+		border: none;
+		margin-bottom: 0;
+	}
+}
