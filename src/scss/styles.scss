@@ -79,7 +79,7 @@ body > main {
 	color: inherit;
 }
 
-.parsley-errors-list {
+ul.parsley-errors-list {
 	position: relative !important;
 
 	margin-top: 0.5rem !important;
@@ -91,6 +91,10 @@ body > main {
 	background-color: $brand-warning !important;
 	color: #fff !important;
 
+	&:empty {
+		display: none !important;
+	}
+
 	&:before {
 		display: none;
 	}
@@ -101,13 +105,23 @@ body > main {
 		padding: 0 !important;
 	}
 
-	li {
+	& > li {
 		border-bottom: #fff 1px solid;
 		margin-bottom: 0.5rem;
+		cursor: auto;
+
+		&:hover {
+			background: transparent;
+			color: #fff;
+		}
 	}
 
 	li:last-child {
 		border: none;
 		margin-bottom: 0;
 	}
+}
+
+.btn {
+	cursor: pointer;
 }

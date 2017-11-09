@@ -10175,6 +10175,20 @@
 		"oAP": "\/database\/structure\/visits_types.sqlite3.sql",
 		"oF": 0
 		},
+	"\/db-empty.sqlite3": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/db-empty.sqlite3",
+		"oF": 0
+		},
+	"\/db-some-data.sqlite3": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/db-some-data.sqlite3",
+		"oF": 0
+		},
 	"\/db.sqlite3": {
 		"cB": 0,
 		"ft": 8192,
@@ -10291,49 +10305,15 @@
 		"oAP": "\/static\/css\/styles.min.css.map",
 		"oF": 0
 		},
-	"\/static\/js\/bootstrap.min.js": {
+	"\/static\/js\/visit-db.js": {
 		"ft": 64,
 		"ma": 1,
 		"mi": 1,
 		"oA": 1,
-		"oAP": "\/static\/js\/min\/bootstrap.min.min.js",
+		"oAP": "\/static\/js\/min\/visit-db.min.js",
 		"oF": 0,
 		"sC": 0,
 		"tS": 0
-		},
-	"\/static\/js\/bootstrap.min.js.map": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/static\/js\/bootstrap.min.js.map",
-		"oF": 0
-		},
-	"\/static\/js\/jquery-3.2.1.min.js": {
-		"ft": 64,
-		"ma": 1,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "\/static\/js\/min\/jquery-3.2.1.min.min.js",
-		"oF": 0,
-		"sC": 0,
-		"tS": 0
-		},
-	"\/static\/js\/popper.min.js": {
-		"ft": 64,
-		"ma": 1,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "\/static\/js\/min\/popper.min.min.js",
-		"oF": 0,
-		"sC": 0,
-		"tS": 0
-		},
-	"\/static\/js\/popper.min.js.map": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/static\/js\/popper.min.js.map",
-		"oF": 0
 		},
 	"\/tools\/mysql2sqlite\/LICENSE": {
 		"cB": 0,

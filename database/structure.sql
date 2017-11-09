@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `case_types` (
 
 CREATE TABLE IF NOT EXISTS `disciplines` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `abbreviation` varchar(50) NOT NULL,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

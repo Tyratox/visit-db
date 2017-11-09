@@ -11,6 +11,7 @@ const expressSession = require("express-session");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const compression = require("compression");
+const { celebrate, Joi, errors: celebrateErrors } = require("celebrate");
 
 process.on("uncaughtException", err => {
 	logger.log("error", err);
@@ -67,11 +68,65 @@ const prepareTemplate = path => {
 				reject(err);
 			}
 
-			resolve(
-				ejs.compile(data, { filename: path, strict: true, rmWhitespace: true })
-			);
+			resolve(ejs.compile(data, { filename: path, rmWhitespace: true }));
 		});
 	});
+};
+
+const loadAll = (db, query) => {
+	return new Promise((resolve, reject) => {
+		db.all(query, (err, rows) => {
+			if (err) {
+				return reject(err);
+			}
+
+			resolve(rows);
+		});
+	});
+};
+
+const insert = (db, query, bindParams = []) => {
+	return new Promise((resolve, reject) => {
+		db.run(query, bindParams, function(err) {
+			if (err) {
+				return reject(err);
+			}
+			resolve(this.lastID);
+		});
+	});
+};
+
+const get = (db, query, bindParams = []) => {
+	return new Promise((resolve, reject) => {
+		db.get(query, bindParams, (err, row) => {
+			if (err) {
+				return reject(err);
+			}
+			resolve(row);
+		});
+	});
+};
+
+const findIdOrInsert = async (db, table, column, value) => {
+	const row = await get(db, `SELECT * FROM ${table} WHERE ${column} = ?`, [
+		value
+	]);
+
+	if (row) {
+		//found, return
+		return Promise.resolve(row.id);
+	} else {
+		return new Promise((resolve, reject) => {
+			db.run(`INSERT INTO ${table} (${column}) VALUES(?)`, [value], function(
+				err
+			) {
+				if (err) {
+					return reject(err);
+				}
+				resolve(this.lastID);
+			});
+		});
+	}
 };
 
 app.use("/static", express.static(path.resolve(__dirname, "../static")));
@@ -82,16 +137,131 @@ app.use(
 
 const setupRouting = async () => {
 	app.get("/", async (request, response) => {
+		response.header("Content-Type", "text/html");
+
 		const indexTemplate = await prepareTemplate(
 			path.resolve(__dirname, "templates", "pages", "index.ejs")
 		);
+
+		const stations = await loadAll(db, "SELECT name FROM stations"),
+			users = await loadAll(db, "SELECT username FROM users"),
+			disciplines = await loadAll(
+				db,
+				"SELECT id, name, abbreviation FROM disciplines"
+			),
+			visitTypes = await loadAll(db, "SELECT id, name FROM visit_types"),
+			hospitals = await loadAll(db, "SELECT id, name FROM hospitals");
+
+		response.end(
+			indexTemplate({ stations, users, visitTypes, hospitals, disciplines })
+		);
+	});
+
+	app.post(
+		"/",
+		celebrate({
+			body: {
+				username: Joi.string()
+					.alphanum()
+					.required(),
+				date: Joi.string()
+					.regex(/[0-9]{2}\.[0-9]{2}\.[0-9]{4}/)
+					.required(),
+				patient_count: Joi.number()
+					.positive()
+					.required(),
+				visit_type: Joi.number()
+					.positive()
+					.required(),
+				duration: Joi.number()
+					.positive()
+					.required(),
+				hospital: Joi.number()
+					.positive()
+					.required(),
+				station: Joi.string()
+					.alphanum()
+					.required(),
+				discipline: Joi.number()
+					.positive()
+					.required()
+			}
+		}),
+		async (request, response) => {
+			const {
+				username,
+				date,
+				patient_count,
+				visit_type,
+				duration,
+				hospital,
+				station,
+				discipline
+			} = request.body;
+
+			//Find the right user
+			const userId = await findIdOrInsert(db, "users", "username", username),
+				days = date.substring(0, 2),
+				months = date.substring(3, 5),
+				year = date.substring(6),
+				jsDate = new Date(year + "-" + months + "-" + days),
+				stationId = await findIdOrInsert(db, "stations", "name", station);
+
+			const visitId = await insert(
+				db,
+				`INSERT INTO visits(
+					date,
+					duration,
+					patient_count,
+					visit_type_id,
+					user_id,
+					hospital_id,
+					discipline_id,
+					station_id
+				) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`,
+				[
+					jsDate.getTime() / 1000,
+					duration,
+					patient_count,
+					visit_type,
+					userId,
+					hospital,
+					discipline,
+					stationId
+				]
+			);
+			response.redirect("/step2/" + visitId);
+		}
+	);
+
+	app.get("/step2/:visitId", async (request, response) => {
 		response.header("Content-Type", "text/html");
 
-		db.all("SELECT name FROM stations", (err, rows) => {
-			const stations = rows.map(row => row.name);
+		const visitId = request.params.visitId;
 
-			response.end(indexTemplate({ stations: ["711", "712"] }));
-		});
+		const indexTemplate = await prepareTemplate(
+			path.resolve(__dirname, "templates", "pages", "step2.ejs")
+		);
+
+		const stations = await loadAll(db, "SELECT name FROM stations"),
+			users = await loadAll(db, "SELECT username FROM users"),
+			disciplines = await loadAll(
+				db,
+				"SELECT id, name, abbreviation FROM disciplines"
+			),
+			visitTypes = await loadAll(db, "SELECT id, name FROM visit_types"),
+			hospitals = await loadAll(db, "SELECT id, name FROM hospitals");
+
+		response.end(
+			indexTemplate({ stations, users, visitTypes, hospitals, disciplines })
+		);
+	});
+
+	app.use(celebrateErrors());
+	app.use((error, request, response, next) => {
+		response.write("<h1>Fehler! Bitte melden!</h1>");
+		response.write("<code>" + JSON.stringify(error) + "</code>");
+		response.end();
 	});
 };
 

@@ -17,6 +17,7 @@
 	},
 	"dependencies": {
 		"body-parser": "^1.18.2",
+		"celebrate": "^7.0.1",
 		"compression": "^1.7.1",
 		"ejs": "^2.5.7",
 		"express": "^4.16.2",
@@ -26,6 +27,9 @@
 		"winston": "^2.4.0"
 	},
 	"pkg": {
-		"assets": ["static/*", "src/templates/**/*.ejs"]
+		"assets": [
+			"static/*",
+			"src/templates/**/*.ejs"
+		]
 	}
 }
