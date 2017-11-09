@@ -243,18 +243,35 @@ const setupRouting = async () => {
 			path.resolve(__dirname, "templates", "pages", "step2.ejs")
 		);
 
-		const stations = await loadAll(db, "SELECT name FROM stations"),
-			users = await loadAll(db, "SELECT username FROM users"),
-			disciplines = await loadAll(
+		const substances = await loadAll(
 				db,
-				"SELECT id, name, abbreviation FROM disciplines"
+				"SELECT id, atc_code, name FROM substances"
 			),
-			visitTypes = await loadAll(db, "SELECT id, name FROM visit_types"),
-			hospitals = await loadAll(db, "SELECT id, name FROM hospitals");
+			caseTypes = await loadAll(
+				db,
+				"SELECT id, abbreviation, name FROM case_types"
+			),
+			visit = await get(
+				db,
+				`SELECT date,
+				duration,
+				patient_count,
+				visit_types.name as visit_type_name,
+				users.username as username,
+				hospitals.name as hospital_name,
+				disciplines.name as discipline_name,
+				stations.name as station_name
+				FROM visits
+				LEFT JOIN visit_types ON visits.visit_type_id=visit_types.id
+				LEFT JOIN users ON visits.user_id=users.id
+				LEFT JOIN hospitals ON visits.hospital_id=hospitals.id
+				LEFT JOIN disciplines ON visits.discipline_id=disciplines.id
+				LEFT JOIN stations ON visits.station_id=stations.id
+				WHERE visits.id = ?`,
+				[visitId]
+			);
 
-		response.end(
-			indexTemplate({ stations, users, visitTypes, hospitals, disciplines })
-		);
+		response.end(indexTemplate({ visit, substances, caseTypes }));
 	});
 
 	app.use(celebrateErrors());
