@@ -10358,11 +10358,11 @@
 		"oAP": "\/src\/templates\/pages\/patient.ejs",
 		"oF": 0
 		},
-	"\/src\/templates\/pages\/visits Kopie.ejs": {
+	"\/src\/templates\/pages\/visit.ejs": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
-		"oAP": "\/src\/templates\/pages\/visits Kopie.ejs",
+		"oAP": "\/src\/templates\/pages\/visit.ejs",
 		"oF": 0
 		},
 	"\/src\/templates\/pages\/visits.ejs": {

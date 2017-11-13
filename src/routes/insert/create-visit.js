@@ -85,10 +85,11 @@ module.exports.post = [
 
 		//Find the right user
 		const userId = await findIdOrInsert(db, "users", "username", username),
-			days = date.substring(0, 2),
-			months = date.substring(3, 5),
-			year = date.substring(6),
-			jsDate = new Date(year + "-" + months + "-" + days),
+			jsDate = new Date(
+				date.substring(6),
+				date.substring(3, 5) - 1,
+				date.substring(0, 2)
+			),
 			stationId = await findIdOrInsert(db, "stations", "name", station);
 
 		const visitId = await insert(
