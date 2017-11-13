@@ -1,0 +1,69 @@
+<%- include('../header') -%>
+	<div class="container">
+		<h2>
+			Visite #<%= visit.id %>
+		</h2>
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered">
+				<tbody>
+					<tr>
+						<td>ID</td>
+						<td><%= visit.id %></td>
+					</tr>
+					<tr>
+						<td>Typ</td>
+						<td><%= visit.visit_type_name %></td>
+					</tr>
+					<tr>
+						<td>Datum</td>
+						<td>
+							<%
+								let d = new Date(visit.date*1000),
+								    date = d.getDate() + "." + 
+									(d.getMonth() + 1) + "." + 
+									d.getFullYear();
+							%>
+							<%= date %>
+						</td>
+					</tr>
+					<tr>
+						<td>Wer</td>
+						<td><%= visit.username %></td>
+					</tr>
+					<tr>
+						<td>Dauer</td>
+						<td><%= visit.duration %> Minuten</td>
+					</tr>
+					<tr>
+						<td>Besuchte Patient</td>
+						<td><%= visit.patient_count %></td>
+					</tr>
+					<tr>
+						<td>Spital</td>
+						<td><%= visit.hospital_name %></td>
+					</tr>
+					<tr>
+						<td>Disziplin</td>
+						<td><%= visit.discipline_name %></td>
+					</tr>
+					<tr>
+						<td>Station</td>
+						<td><%= visit.station_name %></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="row">
+				<%-
+					fields.map(({title, content}) => {
+						return `
+							<div class='col-12 col-md-6'>
+								<h2>${title}</h2>
+								<p>${content}</p>
+							</div>
+						`;
+					}).join("")
+				%>
+			</div>
+		</div>
+	</div>
+<%- include('../footer') -%>

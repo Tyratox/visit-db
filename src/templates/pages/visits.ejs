@@ -1,0 +1,75 @@
+<%- include('../header') -%>
+	<div class="container">
+		<h1>
+			Visiten
+		</h1>
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Typ</th>
+						<th>Datum</th>
+						<th>Wer</th>
+						<th>Spital</th>
+						<th>Disziplin</th>
+						<th>Station</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%- visits.map((visit) => {
+						const d = new Date(visit.date*1000),
+							date = d.getDate() + "." +
+									(d.getMonth()+1) + "." +
+									d.getFullYear();
+
+						return `
+							<tr data-clickable="/visit/${visit.id}">
+								<td>${visit.id}</td>
+								<td>${visit.visit_type_name}</td>
+								<td>${date}</td>
+								<td>${visit.username}</td>
+								<td>${visit.hospital_name}</td>
+								<td>${visit.discipline_name}</td>
+								<td>${visit.station_name}</td>
+							</tr>
+						`;
+					}) %>
+				</tbody>
+			</table>
+		</div>
+		<% if (visitCount >= 100){ %>
+			<nav>
+				<ul class="pagination">
+					<li class="page-item"><a class="page-link" href="/visits">Erste</a></li>
+					<%- Array(page > 4 ? 3 : page - 1).fill().map((e, index) => {
+						return `
+							<li class="page-item">
+								<a class="page-link" href="/visits/${page - index - 1}">
+									${page - index - 1}
+								</a>
+							</li>
+						`;
+					}).reverse().join('') %>
+					<li class="page-item active">
+						<a class="page-link" href="#"><%= page %></a>
+					</li>
+					<%- Array(Math.min(3, Math.floor(visitCount / 100) - page)).fill().map((e, index) => {
+						return `
+							<li class="page-item">
+								<a class="page-link" href="/visits/${page + index + 1 }">
+									${page + index + 1}
+								</a>
+							</li>
+						`;
+					}).join('') %>
+					<li class="page-item">
+						<a class="page-link" href="/visits/<%= Math.floor(visitCount/100) %>">
+							Letzte
+						</a>
+					</li>
+				</ul>
+			</nav>
+		<% } %>
+	</div>
+<%- include('../footer') -%>

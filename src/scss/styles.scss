@@ -8,6 +8,25 @@ body > main {
 /*form section {
 }*/
 
+[data-clickable] {
+	cursor: pointer;
+}
+
+.repeat {
+	text-align: center;
+
+	a.btn.btn-primary {
+		display: inline-block;
+		margin: 1rem auto;
+
+		color: #fff;
+	}
+}
+
+.pagination {
+	justify-content: center;
+}
+
 .awesomplete {
 	display: block;
 }

@@ -10182,13 +10182,6 @@
 		"oAP": "\/db-empty.sqlite3",
 		"oF": 0
 		},
-	"\/db-some-data.sqlite3": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/db-some-data.sqlite3",
-		"oF": 0
-		},
 	"\/db.sqlite3": {
 		"cB": 0,
 		"ft": 8192,
@@ -10234,6 +10227,36 @@
 		"rFN": 0,
 		"uCM": 0
 		},
+	"\/src\/db.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/min\/db.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
+	"\/src\/dbutils.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/min\/dbutils.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
+	"\/src\/ejsutils.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/min\/ejsutils.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
 	"\/src\/index.js": {
 		"ft": 64,
 		"ma": 1,
@@ -10250,6 +10273,46 @@
 		"mi": 1,
 		"oA": 1,
 		"oAP": "\/src\/min\/logger.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
+	"\/src\/routes\/insert\/add-patient-data.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/routes\/insert\/min\/add-patient-data.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
+	"\/src\/routes\/insert\/create-visit.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/routes\/insert\/min\/create-visit.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
+	"\/src\/routes\/visit.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/routes\/min\/visit.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
+	"\/src\/routes\/visits.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/routes\/min\/visits.min.js",
 		"oF": 0,
 		"sC": 0,
 		"tS": 0
@@ -10288,11 +10351,25 @@
 		"oAP": "\/src\/templates\/pages\/index.ejs",
 		"oF": 0
 		},
-	"\/src\/templates\/pages\/step2.ejs": {
+	"\/src\/templates\/pages\/patient.ejs": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
-		"oAP": "\/src\/templates\/pages\/step2.ejs",
+		"oAP": "\/src\/templates\/pages\/patient.ejs",
+		"oF": 0
+		},
+	"\/src\/templates\/pages\/visits Kopie.ejs": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/src\/templates\/pages\/visits Kopie.ejs",
+		"oF": 0
+		},
+	"\/src\/templates\/pages\/visits.ejs": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/src\/templates\/pages\/visits.ejs",
 		"oF": 0
 		},
 	"\/static\/css\/styles.min.css": {

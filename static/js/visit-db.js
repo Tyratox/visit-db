@@ -1,4 +1,6 @@
 (function() {
+	$('[data-toggle="tooltip"]').tooltip();
+
 	document.querySelectorAll(".awesomplete-label").forEach(function(el) {
 		var list = [],
 			values = el.getAttribute("data-value").split(";"),
@@ -27,7 +29,6 @@
 			);
 			$(el).hide();
 			var $readonly = $("#tmp");
-			console.log($readonly);
 			$readonly.removeAttr("id");
 			$readonly.on("click", function() {
 				$readonly.hide();
@@ -37,5 +38,22 @@
 					.focus();
 			});
 		});
+	});
+
+	$(".repeat a.btn").on("click", function() {
+		var $before = $(this).parent();
+
+		var $template = $(this)
+			.closest(".repeatable")
+			.children()
+			.first()
+			.clone();
+		$template.find("input").val("");
+		$template.find("textarea").val("");
+		$template.insertBefore($before);
+	});
+
+	$("[data-clickable]").on("click", function() {
+		window.location = $(this).attr("data-clickable");
 	});
 })();

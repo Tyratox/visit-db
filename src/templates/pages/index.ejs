@@ -4,7 +4,7 @@
 			Neue Visite erfassen
 		</h1>
 		<p>
-			<form action="/" method="POST" data-parsley-validate>
+			<form action="" method="POST" data-parsley-validate>
 				<div class="row">
 					<div class="col-12 col-md-6">
 						<div class="form-group">
@@ -120,6 +120,7 @@
 								required
 								data-label="<%= disciplines.map(d => d.name + ' (' + d.abbreviation + ')').join(';') %>"
 								data-value="<%= disciplines.map(d => d.id).join(';') %>"
+								data-minchars="1"
 								data-autofirst="true"
 							>
 						</div>
