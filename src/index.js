@@ -230,17 +230,17 @@ const setupRouting = async () => {
 					stationId
 				]
 			);
-			response.redirect("/step2/" + visitId);
+			response.redirect("/patient/" + visitId);
 		}
 	);
 
-	app.get("/step2/:visitId", async (request, response) => {
+	app.get("/patient/:visitId", async (request, response) => {
 		response.header("Content-Type", "text/html");
 
 		const visitId = request.params.visitId;
 
 		const indexTemplate = await prepareTemplate(
-			path.resolve(__dirname, "templates", "pages", "step2.ejs")
+			path.resolve(__dirname, "templates", "pages", "patient.ejs")
 		);
 
 		const substances = await loadAll(
