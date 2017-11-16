@@ -170,6 +170,8 @@ module.exports.post = [
 					visitId
 				]
 			);
+
+			response.redirect("/visit/" + visitId);
 		} else {
 			visitId = await insert(
 				db,
@@ -194,8 +196,9 @@ module.exports.post = [
 					stationId
 				]
 			);
-		}
 
-		response.redirect("/add-patient/" + visitId);
+			response.redirect("/add-patient/" + visitId);
+		}
+		
 	}
 ];
