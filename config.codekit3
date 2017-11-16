@@ -10277,6 +10277,36 @@
 		"sC": 0,
 		"tS": 0
 		},
+	"\/src\/routes\/delete\/patient.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/routes\/delete\/min\/patient.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
+	"\/src\/routes\/delete\/visit.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/routes\/delete\/min\/visit.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
+	"\/src\/routes\/export.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/routes\/min\/export.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
 	"\/src\/routes\/insert\/add-patient-data.js": {
 		"ft": 64,
 		"ma": 1,

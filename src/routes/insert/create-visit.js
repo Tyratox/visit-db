@@ -199,6 +199,5 @@ module.exports.post = [
 
 			response.redirect("/add-patient/" + visitId);
 		}
-		
 	}
 ];
