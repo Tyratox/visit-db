@@ -18,22 +18,64 @@ const template = prepareTemplate(
 	path.resolve(__dirname, "..", "..", "templates", "pages", "index.ejs")
 );
 
-module.exports.get = async (request, response) => {
-	response.header("Content-Type", "text/html");
+module.exports.get = [
+	celebrate({
+		query: {
+			visit_id: Joi.number().positive()
+		}
+	}),
+	async (request, response) => {
+		response.header("Content-Type", "text/html");
 
-	const stations = await loadAll(db, "SELECT name FROM stations"),
-		users = await loadAll(db, "SELECT username FROM users"),
-		disciplines = await loadAll(
-			db,
-			"SELECT id, name, abbreviation FROM disciplines"
-		),
-		visitTypes = await loadAll(db, "SELECT id, name FROM visit_types"),
-		hospitals = await loadAll(db, "SELECT id, name FROM hospitals");
+		const { visit_id: visitIdToUpdate } = request.query;
 
-	response.end(
-		template({ stations, users, visitTypes, hospitals, disciplines })
-	);
-};
+		const stations = await loadAll(db, "SELECT name FROM stations"),
+			users = await loadAll(db, "SELECT username FROM users"),
+			disciplines = await loadAll(
+				db,
+				"SELECT id, name, abbreviation FROM disciplines"
+			),
+			visitTypes = await loadAll(db, "SELECT id, name FROM visit_types"),
+			hospitals = await loadAll(db, "SELECT id, name FROM hospitals");
+
+		let current_values = {};
+
+		if (visitIdToUpdate) {
+			current_values = await get(
+				db,
+				`SELECT
+				users.username,
+				visits.date,
+				visits.patient_count,
+				visits.visit_type_id as visit_type,
+				visits.duration,
+				visits.hospital_id as hospital,
+				stations.name as station,
+				visits.discipline_id as discipline
+				FROM visits
+				LEFT JOIN users ON visits.user_id=users.id
+				LEFT JOIN stations ON visits.station_id=stations.id
+				WHERE visits.id=?
+				`,
+				[visitIdToUpdate]
+			);
+			const d = new Date(current_values.date * 1000);
+			current_values.date =
+				d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear();
+		}
+
+		response.end(
+			template({
+				stations,
+				users,
+				visitTypes,
+				hospitals,
+				disciplines,
+				...current_values
+			})
+		);
+	}
+];
 
 module.exports.post = [
 	celebrate({
@@ -62,6 +104,9 @@ module.exports.post = [
 			discipline: Joi.number()
 				.positive()
 				.required()
+		},
+		query: {
+			visit_id: Joi.number().positive()
 		}
 	}),
 	async (request, response, next) => {
@@ -75,6 +120,8 @@ module.exports.post = [
 			station,
 			discipline
 		} = request.body;
+
+		const { visit_id: visitIdToUpdate } = request.query;
 
 		if (!await exists(db, "disciplines", "id", discipline)) {
 			return next(new Error("The received discipline id is ivalid!"));
@@ -93,29 +140,62 @@ module.exports.post = [
 			),
 			stationId = await findIdOrInsert(db, "stations", "name", station);
 
-		const visitId = await insert(
-			db,
-			`INSERT INTO visits(
-			date,
-			duration,
-			patient_count,
-			visit_type_id,
-			user_id,
-			hospital_id,
-			discipline_id,
-			station_id
-		) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`,
-			[
-				jsDate.getTime() / 1000,
+		let visitId;
+
+		if (visitIdToUpdate) {
+			visitId = visitIdToUpdate;
+
+			await update(
+				db,
+				`UPDATE visits
+				SET date = ?,
+				duration = ?,
+				patient_count = ?,
+				visit_type_id = ?,
+				user_id = ?,
+				hospital_id = ?,
+				discipline_id = ?,
+				station_id = ?
+				WHERE visits.id=?
+				`,
+				[
+					jsDate.getTime() / 1000,
+					duration,
+					patient_count,
+					visit_type,
+					userId,
+					hospital,
+					discipline,
+					stationId,
+					visitId
+				]
+			);
+		} else {
+			visitId = await insert(
+				db,
+				`INSERT INTO visits(
+				date,
 				duration,
 				patient_count,
-				visit_type,
-				userId,
-				hospital,
-				discipline,
-				stationId
-			]
-		);
+				visit_type_id,
+				user_id,
+				hospital_id,
+				discipline_id,
+				station_id
+			) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`,
+				[
+					jsDate.getTime() / 1000,
+					duration,
+					patient_count,
+					visit_type,
+					userId,
+					hospital,
+					discipline,
+					stationId
+				]
+			);
+		}
+
 		response.redirect("/add-patient/" + visitId);
 	}
 ];
