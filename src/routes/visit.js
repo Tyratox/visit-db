@@ -85,16 +85,6 @@ module.exports.get = [
 			})
 		);
 
-		const fields = await loadAll(
-			db,
-			`SELECT title, content FROM
-			patient_fields
-			LEFT JOIN patients ON patient_fields.patient_id=patients.id
-			WHERE patients.visit_id = ?
-			`,
-			[visitId]
-		);
-
-		response.end(template({ visit, patients, fields }));
+		response.end(template({ visit, patients }));
 	}
 ];
