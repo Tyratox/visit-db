@@ -31,8 +31,18 @@
 							<li class="nav-item">
 								<a class="nav-link" href="/visits">Visitenliste</a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">Exportieren</a>
+							 <li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="export-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Exportieren
+								</a>
+								<div class="dropdown-menu" aria-labelledby="export-dropdown">
+									<a class="dropdown-item" href="/export">Alle</a>
+									<div class="dropdown-divider"></div>
+									<a class="dropdown-item" href="/export/?visit_type_id=1">Visitenbegleitung</a>
+									<a class="dropdown-item" href="/export/?visit_type_id=2">Kardexvisite</a>
+									<a class="dropdown-item" href="/export/?visit_type_id=3">Substitution</a>
+									<a class="dropdown-item" href="/export/?visit_type_id=4">Kurvenscreening</a>
+								</div>
 							</li>
 						</ul>
 					</div>

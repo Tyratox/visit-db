@@ -58,6 +58,9 @@ app.get("/visits/:page?", visits.get);
 const visit = require("./routes/visit");
 app.get("/visit/:visitId", visit.get);
 
+const exportRoute = require("./routes/export");
+app.get("/export", exportRoute);
+
 app.use(celebrateErrors());
 app.use((error, request, response, next) => {
 	response.write("<h1>Fehler! Bitte melden!</h1>");
