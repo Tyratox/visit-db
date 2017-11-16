@@ -23,6 +23,10 @@ const toTimestamp = date => {
 	);
 };
 
+const template = prepareTemplate(
+	path.resolve(__dirname, "..", "templates", "pages", "visits.ejs")
+);
+
 module.exports.get = [
 	celebrate({
 		params: {
@@ -56,9 +60,6 @@ module.exports.get = [
 	}),
 	async (request, response) => {
 		response.header("Content-Type", "text/html");
-		const template = prepareTemplate(
-			path.resolve(__dirname, "..", "templates", "pages", "visits.ejs")
-		);
 
 		const page = request.params.page ? request.params.page : 1;
 		const filter = request.query.filter ? request.query.filter : {};
@@ -89,6 +90,7 @@ module.exports.get = [
 			${filter.hospital_id ? "AND hospitals.id = $hospitalId" : ""}
 			${filter.discipline_id ? "AND disciplines.id = $disciplineId" : ""}
 			${filter.station_id ? "AND stations.id = $stationId" : ""}
+			ORDER BY visits.date DESC
 			LIMIT 100
 			OFFSET $offset
 			`,

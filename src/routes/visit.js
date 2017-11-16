@@ -13,6 +13,10 @@ const {
 	findOrInsert
 } = require("../dbutils");
 
+const template = prepareTemplate(
+	path.resolve(__dirname, "..", "templates", "pages", "visit.ejs")
+);
+
 module.exports.get = [
 	celebrate({
 		params: {
@@ -23,10 +27,6 @@ module.exports.get = [
 		response.header("Content-Type", "text/html");
 
 		const { visitId } = request.params;
-
-		const template = prepareTemplate(
-			path.resolve(__dirname, "..", "templates", "pages", "visit.ejs")
-		);
 
 		const visit = await get(
 			db,
