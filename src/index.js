@@ -58,6 +58,12 @@ app.get("/visits/:page?", visits.get);
 const visit = require("./routes/visit");
 app.get("/visit/:visitId", visit.get);
 
+const deleteVisit = require("./routes/delete/visit");
+app.get("/delete/visit/:visitId", deleteVisit);
+
+const deletePatient = require("./routes/delete/patient");
+app.get("/delete/patient/:patientId", deletePatient);
+
 const exportRoute = require("./routes/export");
 app.get("/export", exportRoute);
 

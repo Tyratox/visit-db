@@ -1,7 +1,11 @@
 <%- include('../header') -%>
 	<div class="container">
 		<h2>
-			Visite #<%= visit.id %> <small>(<a href="/?visit_id=<%= visit.id%>">bearbeiten</a>)</small>
+			Visite #<%= visit.id %>
+			<small>
+				(<a href="/?visit_id=<%= visit.id%>">bearbeiten</a>)
+				(<a class="text-danger" href="/delete/visit/<%= visit.id%>">löschen</a>)
+			</small>
 		</h2>
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered">
@@ -55,6 +59,7 @@
 			<div class="row">
 				<%-
 					patients.map(({
+						id,
 						patient_number,
 						date_of_birth,
 						gender,
@@ -94,6 +99,12 @@
 											<td>Patientennummer</td>
 											<td>${patient_number}</td>
 										</tr>
+										<tr>
+											<td>Aktionen</td>
+											<td>
+												<a class="btn btn-danger" href="/delete/patient/${id}">Patient löschen</a>
+											</td>
+										</tr>
 									</table>
 								</div>
 							</div>
@@ -113,7 +124,7 @@
 								</div>
 							</div>
 						`;
-					});
+					}).join("");
 				%>
 				<div class="col-12" style="margin-bottom: 1rem;">
 					<a class="btn btn-primary" href="/add-patient/<%= visit.id %>">Patient hinzufügen</a>

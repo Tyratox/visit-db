@@ -58,6 +58,17 @@ const insert = (db, query, bindParams = []) => {
 };
 module.exports.insert = insert;
 
+module.exports.remove = (db, query, bindParams = []) => {
+	return new Promise((resolve, reject) => {
+		db.run(query, bindParams, err => {
+			if (err) {
+				return reject(err);
+			}
+			resolve();
+		});
+	});
+};
+
 const update = (db, query, bindParams = []) => {
 	return new Promise((resolve, reject) => {
 		db.run(query, bindParams, err => {
