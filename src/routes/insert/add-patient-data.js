@@ -107,7 +107,7 @@ module.exports.post = [
 
 		const patientId = await insert(
 			db,
-			"INSERT INTO patients(case_id, patient_number, substance_id, gender, date_of_birth, visit_id) VALUES(?, ?, ?, ?, ?)",
+			"INSERT INTO patients(case_id, patient_number, substance_id, gender, date_of_birth, visit_id) VALUES(?, ?, ?, ?, ?, ?)",
 			[
 				caseId,
 				patient_number,
