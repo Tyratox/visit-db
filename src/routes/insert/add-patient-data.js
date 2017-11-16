@@ -69,8 +69,16 @@ module.exports.post = [
 				.valid("male", "female")
 				.required(),
 			substance: Joi.number().positive(),
-			field_title: Joi.array().items(Joi.string().max(25)),
-			field_content: Joi.array().items(Joi.string().max(500))
+			field_title: Joi.array().items(
+				Joi.string()
+					.max(25)
+					.allow("")
+			),
+			field_content: Joi.array().items(
+				Joi.string()
+					.max(500)
+					.allow("")
+			)
 		}
 	}),
 	async (request, response) => {
@@ -122,6 +130,9 @@ module.exports.post = [
 			.then(() => {
 				return Promise.all(
 					field_title.map((title, index) => {
+						if (!title || !field_content[index]) {
+							return Promise.resolve();
+						}
 						return insert(
 							db,
 							"INSERT INTO patient_fields (title, content, patient_id) VALUES (?, ?, ?)",
