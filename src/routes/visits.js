@@ -13,10 +13,6 @@ const {
 	findOrInsert
 } = require("../dbutils");
 
-const template = prepareTemplate(
-	path.resolve(__dirname, "..", "templates", "pages", "visits.ejs")
-);
-
 const toTimestamp = date => {
 	return (
 		new Date(
@@ -42,12 +38,27 @@ module.exports.get = [
 					.allow(""),
 				date_to: Joi.string()
 					.regex(/[0-9]{2}\.[0-9]{2}\.[0-9]{4}/)
+					.allow(""),
+				user_id: Joi.number()
+					.positive()
+					.allow(""),
+				hospital_id: Joi.number()
+					.positive()
+					.allow(""),
+				discipline_id: Joi.number()
+					.positive()
+					.allow(""),
+				station_id: Joi.number()
+					.positive()
 					.allow("")
 			}
 		}
 	}),
 	async (request, response) => {
 		response.header("Content-Type", "text/html");
+		const template = prepareTemplate(
+			path.resolve(__dirname, "..", "templates", "pages", "visits.ejs")
+		);
 
 		const page = request.params.page ? request.params.page : 1;
 		const filter = request.query.filter ? request.query.filter : {};
@@ -72,18 +83,24 @@ module.exports.get = [
 			LEFT JOIN stations ON visits.station_id=stations.id
 			WHERE 1=1
 			${filter.visit_type_id ? "AND visits.visit_type_id = $visitTypeId" : ""}
-			${filter.date_from ? "AND visits.date >= $date_from" : ""}
-			${filter.date_to ? "AND visits.date <= $date_to" : ""}
+			${filter.date_from ? "AND visits.date >= $dateFrom" : ""}
+			${filter.date_to ? "AND visits.date <= $dateTo" : ""}
+			${filter.user_id ? "AND users.id = $userId" : ""}
+			${filter.hospital_id ? "AND hospitals.id = $hospitalId" : ""}
+			${filter.discipline_id ? "AND disciplines.id = $disciplineId" : ""}
+			${filter.station_id ? "AND stations.id = $stationId" : ""}
 			LIMIT 100
 			OFFSET $offset
 			`,
 			{
 				$offset: 100 * (page - 1),
 				$visitTypeId: filter.visit_type_id ? filter.visit_type_id : undefined,
-				$date_from: filter.date_from
-					? toTimestamp(filter.date_from)
-					: undefined,
-				$date_to: filter.date_to ? toTimestamp(filter.date_to) : undefined
+				$dateFrom: filter.date_from ? toTimestamp(filter.date_from) : undefined,
+				$dateTo: filter.date_to ? toTimestamp(filter.date_to) : undefined,
+				$userId: filter.user_id ? filter.user_id : undefined,
+				$hospitalId: filter.hospital_id ? filter.hospital_id : undefined,
+				$disciplineId: filter.discipline_id ? filter.discipline_id : undefined,
+				$stationId: filter.station_id ? filter.station_id : undefined
 			}
 		);
 
@@ -92,14 +109,17 @@ module.exports.get = [
 			"SELECT COUNT(*) as count FROM visits"
 		);
 
-		const stations = await loadAll(db, "SELECT name FROM stations"),
-			users = await loadAll(db, "SELECT username FROM users"),
+		const stations = await loadAll(db, "SELECT id, name FROM stations"),
+			users = await loadAll(db, "SELECT id, username FROM users"),
 			disciplines = await loadAll(
 				db,
 				"SELECT id, name, abbreviation FROM disciplines"
 			),
 			visitTypes = await loadAll(db, "SELECT id, name FROM visit_types"),
-			hospitals = await loadAll(db, "SELECT id, name FROM hospitals");
+			hospitals = await loadAll(
+				db,
+				"SELECT id, name, abbreviation FROM hospitals"
+			);
 
 		response.end(
 			template({

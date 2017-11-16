@@ -16,7 +16,7 @@
 								<a data-toggle="collapse" href="#type-filter" aria-expanded="false" aria-controls="filters">
 									(filtern)
 								</a>
-								<div class="collapse" id="type-filter">
+								<div class="collapse <%= locals.filter.visit_type_id ? 'show' : ''  %>" id="type-filter">
 									<select class="form-control filter" name="filter[visit_type_id]">
 										<option selected value="">Nicht filtern</option>
 										<%- visitTypes.map(({id, name}, index) => {
@@ -32,7 +32,7 @@
 								<a data-toggle="collapse" href="#date-filter" aria-expanded="false" aria-controls="filters">
 									(filtern)
 								</a>
-								<div class="collapse" id="date-filter">
+								<div class="collapse <%= locals.filter.date_from || locals.filter.date_to ? 'show' : ''  %>" id="date-filter">
 									<input
 										type="text"
 										class="form-control filter"
@@ -53,27 +53,109 @@
 							</th>
 							<th>
 								Wer
-								<!-- <a data-toggle="collapse" href="#user-filter" aria-expanded="false" aria-controls="filters">
+								<a data-toggle="collapse" href="#user-filter" aria-expanded="false" aria-controls="filters">
 									(filtern)
 								</a>
-								<div class="collapse" id="user-filter">
+								<div class="collapse <%= locals.filter.user_id ? 'show' : ''  %>" id="user-filter">
+									<% if(locals.filter.user_id){ %>
+										<input
+											type="text"
+											class="form-control filter awesomplete-placeholder"
+											readonly
+											value="<%= locals.filter.user_id ? users.filter(s => s.id === filter.user_id)[0].username : '' %>"
+										>
+									<% } %>
 									<input
 										type="text"
-										class="form-control filter"
-										name="filter[username]"
+										class="form-control filter awesomplete-label"
+										style="<%= locals.filter.user_id ? 'display:none' : '' %>"
+										id="station"
+										name="filter[user_id]"
 										placeholder="Benutzername"
-										value="<%= filter.username ? filter.username : '' %>"
-									>-->
+										value="<%= locals.filter.user_id ? filter.user_id : '' %>"
+										data-label="<%= users.map(u => u.username).join(';') %>"
+										data-value="<%= users.map(u => u.id).join(';') %>"
+										pattern="/(<%= users.map(u => u.id).join('|') %>)/"
+										data-minchars="1"
+										data-autofirst="true"
+									>
 								</div>
 							</th>
 							<th>
 								Spital
+								<a data-toggle="collapse" href="#hospital-filter" aria-expanded="false" aria-controls="filters">
+									(filtern)
+								</a>
+								<div class="collapse <%= locals.filter.hospital_id ? 'show' : ''  %>" id="hospital-filter">
+									<select class="form-control filter" name="filter[hospital_id]">
+										<option selected value="">Nicht filtern</option>
+										<%- hospitals.map(({id, name, abbreviation}, index) => {
+											return `<option ${
+												(locals.filter.hospital_id ? (id === filter.hospital_id) : false) ? "selected" : ""
+												} value=${id}>${name} (${abbreviation})</option>`;
+										}).join("") %>
+									</select>
+								</div>
 							</th>
 							<th>
 								Disziplin
+								<a data-toggle="collapse" href="#discipline-filter" aria-expanded="false" aria-controls="filters">
+									(filtern)
+								</a>
+								<div class="collapse <%= locals.filter.discipline_id ? 'show' : ''  %>" id="discipline-filter">
+									<% if(locals.filter.discipline_id){ %>
+										<input
+											type="text"
+											class="form-control filter awesomplete-placeholder"
+											readonly
+											value="<%= locals.filter.discipline_id ? disciplines.filter(d => d.id === filter.discipline_id)[0].name : '' %>"
+										>
+									<% } %>
+									<input
+										type="text"
+										class="form-control filter awesomplete-label"
+										style="<%= locals.filter.discipline_id ? 'display:none' : '' %>"
+										id="discipline"
+										name="filter[discipline_id]"
+										placeholder="Disziplin"
+										value="<%= locals.filter.discipline_id ? filter.discipline_id : '' %>"
+										data-label="<%= disciplines.map(d => d.name + ' (' + d.abbreviation + ')').join(';') %>"
+										data-value="<%= disciplines.map(d => d.id).join(';') %>"
+										pattern="/(<%= disciplines.map(d => d.id).join('|') %>)/"
+										data-minchars="1"
+										data-autofirst="true"
+									>
+								</div>
 							</th>
 							<th>
 								Station
+								<a data-toggle="collapse" href="#station-filter" aria-expanded="false" aria-controls="filters">
+									(filtern)
+								</a>
+								<div class="collapse <%= locals.filter.station_id ? 'show' : ''  %>" id="station-filter">
+									<% if(locals.filter.station_id){ %>
+										<input
+											type="text"
+											class="form-control filter awesomplete-placeholder"
+											readonly
+											value="<%= locals.filter.station_id ? stations.filter(s => s.id === filter.station_id)[0].name : '' %>"
+										>
+									<% } %>
+									<input
+										type="text"
+										class="form-control filter awesomplete-label"
+										style="<%= locals.filter.station_id ? 'display:none' : '' %>"
+										id="station"
+										name="filter[station_id]"
+										placeholder="Station"
+										value="<%= locals.filter.station_id ? filter.station_id : '' %>"
+										data-label="<%= stations.map(s => s.name).join(';') %>"
+										data-value="<%= stations.map(s => s.id).join(';') %>"
+										pattern="/(<%= stations.map(s => s.id).join('|') %>)/"
+										data-minchars="1"
+										data-autofirst="true"
+									>
+								</div>
 							</th>
 						</tr>
 					</thead>

@@ -4,7 +4,9 @@
 	document.querySelectorAll(".awesomplete-label").forEach(function(el) {
 		var list = [],
 			values = el.getAttribute("data-value").split(";"),
-			labels = el.getAttribute("data-label").split(";");
+			labels = el.getAttribute("data-label").split(";"),
+			defaultValue = el.getAttribute("value"),
+			style = el.getAttribute("style");
 
 		if (values.length !== labels.length) {
 			console.error("data-value and data-label size don't match for", el);
@@ -31,13 +33,22 @@
 			var $readonly = $("#tmp");
 			$readonly.removeAttr("id");
 			$readonly.on("click", function() {
-				$readonly.hide();
+				$readonly.remove();
 				el.value = "";
 				$(el)
 					.show()
 					.focus();
 			});
 		});
+	});
+
+	$(".awesomplete-placeholder").on("click", function() {
+		var $input = $(this)
+			.parent()
+			.find(".awesomplete-label");
+		$(this).remove();
+		$input.val("");
+		$input.show().focus();
 	});
 
 	$(".repeat a.btn").on("click", function() {
