@@ -10,7 +10,8 @@ const {
 	update,
 	get,
 	exists,
-	findOrInsert
+	findOrInsert,
+	findIdOrInsert
 } = require("../../dbutils");
 
 const template = prepareTemplate(
@@ -104,24 +105,27 @@ module.exports.post = [
 			case_number
 		);
 
-		update(
+		const patientId = await insert(
 			db,
-			"UPDATE cases SET case_type_id = ?, patient_number = ?, date_of_birth = ?, gender = ?",
-			[case_type, patient_number, date_of_birth, gender]
-		)
-			.then(() => {
-				return update(db, "UPDATE visits SET case_id = ?, substance_id = ?", [
-					caseId,
-					substance ? substance : null
-				]);
-			})
+			"INSERT INTO patients(case_id, patient_number, substance_id, gender, date_of_birth, visit_id) VALUES(?, ?, ?, ?, ?)",
+			[
+				caseId,
+				patient_number,
+				substance ? substance : null,
+				gender,
+				date_of_birth,
+				visitId
+			]
+		);
+
+		update(db, "UPDATE cases SET case_type_id = ?", [case_type])
 			.then(() => {
 				return Promise.all(
 					field_title.map((title, index) => {
 						return insert(
 							db,
-							"INSERT INTO visit_fields (title, content, visit_id) VALUES (?, ?, ?)",
-							[title, field_content[index], visitId]
+							"INSERT INTO patient_fields (title, content, patient_id) VALUES (?, ?, ?)",
+							[title, field_content[index], patientId]
 						);
 					})
 				);

@@ -35,7 +35,7 @@
 						<td><%= visit.duration %> Minuten</td>
 					</tr>
 					<tr>
-						<td>Besuchte Patient</td>
+						<td>Besuchte Patienten</td>
 						<td><%= visit.patient_count %></td>
 					</tr>
 					<tr>
@@ -52,6 +52,28 @@
 					</tr>
 				</tbody>
 			</table>
+			<h2>Patienten</h2>
+			<div class="row">
+				<%-
+					patients.map(({
+						patient_number,
+						date_of_birth,
+						gender,
+						atc_code,
+						substance_name,
+						case_number,
+						case_type_abbreviation,
+						case_type_name,
+						fields
+					}) => {
+						return `
+							<div class="col-12">
+								${patient_number}
+							</div>
+						`;
+					});
+				%>
+			</div>
 			<div class="row">
 				<%-
 					fields.map(({title, content}) => {

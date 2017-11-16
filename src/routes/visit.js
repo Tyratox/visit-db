@@ -51,15 +51,50 @@ module.exports.get = [
 			[visitId]
 		);
 
+		const patients = await Promise.all(
+			(await loadAll(
+				db,
+				`SELECT
+			patients.id,
+			patients.patient_number,
+			patients.date_of_birth,
+			patients.gender,
+			cases.case_number,
+			substances.atc_code,
+			substances.name as substance_name,
+			case_types.abbreviation as case_type_abbreviation,
+			case_types.name as case_type_name
+			FROM patients
+			LEFT JOIN cases ON patients.case_id=cases.id
+			LEFT JOIN case_types ON cases.case_type_id=case_types.id
+			LEFT JOIN substances ON patients.substance_id=substances.id
+			WHERE patients.visit_id = ?
+			`,
+				[visitId]
+			)).map(patient => {
+				return loadAll(
+					db,
+					`SELECT title, content FROM
+				patient_fields
+				WHERE patient_id = ?
+				`,
+					[patient.id]
+				).then(fields => {
+					return Promise.resolve({ ...patient, fields });
+				});
+			})
+		);
+
 		const fields = await loadAll(
 			db,
 			`SELECT title, content FROM
-			visit_fields
-			WHERE visit_id = ?
+			patient_fields
+			LEFT JOIN patients ON patient_fields.patient_id=patients.id
+			WHERE patients.visit_id = ?
 			`,
 			[visitId]
 		);
 
-		response.end(template({ visit, fields }));
+		response.end(template({ visit, patients, fields }));
 	}
 ];

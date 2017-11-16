@@ -10,7 +10,8 @@ const {
 	update,
 	get,
 	exists,
-	findOrInsert
+	findOrInsert,
+	findIdOrInsert
 } = require("../../dbutils");
 
 const template = prepareTemplate(

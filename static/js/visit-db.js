@@ -1,4 +1,4 @@
-(function() {
+(function($) {
 	$('[data-toggle="tooltip"]').tooltip();
 
 	document.querySelectorAll(".awesomplete-label").forEach(function(el) {
@@ -67,4 +67,4 @@
 	$("[data-clickable]").on("click", function() {
 		window.location = $(this).attr("data-clickable");
 	});
-})();
+})(jQuery);
