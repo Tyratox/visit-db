@@ -116,11 +116,13 @@ module.exports.post = [
 			case_type: Joi.number()
 				.positive()
 				.required(),
-			patient_number: Joi.string().required(),
+			patient_number: Joi.string().allow(""),
 			gender: Joi.string()
 				.valid("male", "female")
 				.required(),
-			substance: Joi.number().positive(),
+			substance: Joi.number()
+				.positive()
+				.allow(""),
 			field_title: Joi.array().items(
 				Joi.string()
 					.max(25)

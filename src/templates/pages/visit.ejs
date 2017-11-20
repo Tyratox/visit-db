@@ -75,7 +75,7 @@
 										</tr>
 										<tr>
 											<td>Wirkstoff (ATC-Code)</td>
-											<td>${substance_name} (${atc_code})</td>
+											<td>${substance_name ? substance_name : ""} ${atc_code ? "("+atc_code+")" : "-"}</td>
 										</tr>
 										<tr>
 											<td>Geburtsdatum</td>
@@ -86,12 +86,20 @@
 											<td>${gender === "male" ? "männlich" : "weiblich"}</td>
 										</tr>
 										<tr>
+											<td>Falltyp</td>
+											<td>
+												${case_type_name} (${case_type_abbreviation})
+											</td>
+										</tr>
+										<tr>
 											<td>Fallnummer</td>
-											<td>${case_number}</td>
+											<td>
+												${case_number}
+											</td>
 										</tr>
 										<tr>
 											<td>Patientennummer</td>
-											<td>${patient_number}</td>
+											<td>${patient_number ? patient_number : "-"}</td>
 										</tr>
 										<tr>
 											<td>Aktionen</td>
@@ -108,7 +116,8 @@
 								</div>
 							</div>
 							<div class="col-12 col-md-6">
-								<h4>Eigene Felder</h4>
+								<h4 style="visibility:hidden">-</h4>
+								<!-- not proud of this -->
 								<div class="table-responsive">
 									<table class="table table-striped table-bordered">
 										${fields.map(({title, content}) => {

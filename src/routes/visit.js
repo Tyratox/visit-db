@@ -59,20 +59,22 @@ module.exports.get = [
 			(await loadAll(
 				db,
 				`SELECT
-			patients.id,
-			patients.patient_number,
-			patients.date_of_birth,
-			patients.gender,
-			cases.case_number,
-			substances.atc_code,
-			substances.name as substance_name,
-			case_types.abbreviation as case_type_abbreviation,
-			case_types.name as case_type_name
-			FROM patients
-			LEFT JOIN cases ON patients.case_id=cases.id
-			LEFT JOIN case_types ON cases.case_type_id=case_types.id
-			LEFT JOIN substances ON patients.substance_id=substances.id
-			WHERE patients.visit_id = ?
+				patients.id,
+				patients.patient_number,
+				patients.date_of_birth,
+				patients.gender,
+				cases.case_number,
+				case_types.abbreviation as case_type_abbreviation,
+				case_types.name as case_type_name,
+				substances.atc_code,
+				substances.name as substance_name,
+				case_types.abbreviation as case_type_abbreviation,
+				case_types.name as case_type_name
+				FROM patients
+				LEFT JOIN cases ON patients.case_id=cases.id
+				LEFT JOIN case_types ON cases.case_type_id=case_types.id
+				LEFT JOIN substances ON patients.substance_id=substances.id
+				WHERE patients.visit_id = ?
 			`,
 				[visitId]
 			)).map(patient => {

@@ -38,3 +38,24 @@ const stringToUnixTimestamp = string => {
 	return dateToUnixTimestamp(stringToDate(string));
 };
 module.exports.stringToUnixTimestamp = stringToUnixTimestamp;
+
+const formatMinutes = minutes => {
+	let days = 0,
+		hours = 0,
+		mins = minutes % 60;
+
+	if (minutes < 60) {
+	} else if (minutes < 60 * 24) {
+		hours = Math.floor(minutes / 60);
+	} else {
+		days = Math.floor(minutes / 24 / 60);
+		hours = Math.floor((minutes % (24 * 60)) / 60);
+	}
+
+	return (
+		(days ? days + " Tag" + (days > 1 ? "e" : "") + " " : "") +
+		(hours ? hours + " Stunde" + (hours > 1 ? "n" : "") + " " : "") +
+		(mins ? mins + " Minute" + (mins > 1 ? "n" : "") : "")
+	);
+};
+module.exports.formatMinutes = formatMinutes;

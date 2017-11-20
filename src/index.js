@@ -67,6 +67,9 @@ app.get("/delete/patient/:patientId", deletePatient);
 const exportRoute = require("./routes/export");
 app.get("/export", exportRoute);
 
+const overview = require("./routes/overview");
+app.get("/overview", overview.get);
+
 app.use(celebrateErrors());
 app.use((error, request, response, next) => {
 	response.write("<h1>Fehler! Bitte melden!</h1>");
