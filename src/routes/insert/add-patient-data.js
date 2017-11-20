@@ -142,16 +142,21 @@ module.exports.post = [
 	}),
 	async (request, response) => {
 		const { visitId } = request.params;
-		const {
+		let {
 			case_number,
 			date_of_birth,
 			case_type,
 			patient_number,
 			gender,
-			substance,
-			field_title,
-			field_content
+			substance
 		} = request.body;
+
+		const field_title = request.body.field_title
+			? request.body.field_title
+			: [];
+		const field_content = request.body.field_content
+			? request.body.field_content
+			: [];
 
 		const { patient_id: idToUpdate } = request.query;
 
