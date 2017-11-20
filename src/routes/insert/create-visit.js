@@ -13,7 +13,10 @@ const {
 	findOrInsert,
 	findIdOrInsert
 } = require("../../dbutils");
-const { unixTimestampToString } = require("../../dateutils");
+const {
+	unixTimestampToString,
+	stringToUnixTimestamp
+} = require("../../dateutils");
 
 const template = prepareTemplate(
 	path.resolve(APP_ROOT, "templates", "pages", "index.ejs")
