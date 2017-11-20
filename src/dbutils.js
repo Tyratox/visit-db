@@ -18,13 +18,13 @@ const copyFileSync = (source, destination) => {
 };
 
 module.exports.setupDbStructure = root => {
-	if (
+	try {
 		fs.readFileSync(path.resolve(root, "db.sqlite3"), {
 			encoding: "utf-8"
-		}).length === 0
-	) {
+		});
+	} catch (err) {
 		copyFileSync(
-			path.resolve(__dirname, "db-empty.sqlite3"),
+			path.resolve(__dirname, "..", "db-empty.sqlite3"),
 			path.resolve(root, "db.sqlite3")
 		);
 	}
