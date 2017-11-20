@@ -58,7 +58,7 @@ module.exports = {
 									"env",
 									{
 										targets: {
-											node: "current"
+											node: "8"
 										}
 									}
 								]

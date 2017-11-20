@@ -1,5 +1,8 @@
 const path = require("path");
 
+const { setupDbStructure } = require("./dbutils");
+setupDbStructure(process.cwd());
+
 const db = require("./db");
 const logger = require("./logger");
 const { errors: celebrateErrors } = require("celebrate");
@@ -10,10 +13,6 @@ const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const compression = require("compression");
 
-const { setupDbStructure } = require("./dbutils");
-
-global.APP_ROOT = __dirname;
-
 process.on("uncaughtException", err => {
 	logger.log("error", err);
 });
@@ -23,8 +22,6 @@ process.on("unhandledRejection", (reason, p) => {
 });
 
 const app = new express();
-
-setupDbStructure(db, __dirname);
 
 app.use(helmet());
 app.use(compression());

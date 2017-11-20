@@ -1,0 +1,108 @@
+<%- include('../header') -%>
+	<div class="container">
+		<h2>Übersicht</h2>
+
+		<h4>Visiten nach Person</h4>
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>Wer</th>
+						<th>Anzahl Visiten</th>
+						<th>Anzahl Patienten</th>
+						<th>Anzahl Interventionen</th>
+						<th>Gesamtdauer</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%-
+						visitsPerPerson.map(({user_id, name, count, patient_count, correction_count, duration}) => {
+							return `
+								<tr data-clickable="/visits/?filter[user_id]=${user_id}">
+									<td>${name}</td>
+									<td>${count}</td>
+									<td>${patient_count}</td>
+									<td>${correction_count ? correction_count : 0}</td>
+									<td>${duration}</td>
+								</tr>
+							`;
+						}).join("")
+					%>
+				</tbody>
+			</table>
+		</div>
+		<h4>Visiten nach Spital</h4>
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>Spital</th>
+						<th>Anzahl Visiten</th>
+						<th>Anzahl Patienten</th>
+						<th>Anzahl Interventionen</th>
+						<th>Gesamtdauer</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%-
+						visitsPerHospital.map(({
+								hospital_id,
+								name,
+								abbreviation,
+								count,
+								patient_count,
+								correction_count,
+								duration
+							}) => {
+							return `
+								<tr data-clickable="/visits/?filter[hospital_id]=${hospital_id}">
+									<td>${name} (${abbreviation})</td>
+									<td>${count}</td>
+									<td>${patient_count}</td>
+									<td>${correction_count ? correction_count : 0}</td>
+									<td>${duration}</td>
+								</tr>
+							`;
+						}).join("")
+					%>
+				</tbody>
+			</table>
+			<h4>Visiten nach Station</h4>
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>Station</th>
+						<th>Anzahl Visiten</th>
+						<th>Anzahl Patienten</th>
+						<th>Anzahl Interventionen</th>
+						<th>Gesamtdauer</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%-
+						visitsPerStation.map(({
+								station_id,
+								name,
+								hospital_abbreviation,
+								count,
+								patient_count,
+								correction_count,
+								duration
+							}) => {
+							return `
+								<tr data-clickable="/visits/?filter[station_id]=${station_id}">
+									<td>${name} (${hospital_abbreviation})</td>
+									<td>${count}</td>
+									<td>${patient_count}</td>
+									<td>${correction_count ? correction_count : 0}</td>
+									<td>${duration}</td>
+								</tr>
+							`;
+						}).join("")
+					%>
+				</tbody>
+			</table>
+		</div>
+	</div>
+<%- include('../footer') -%>

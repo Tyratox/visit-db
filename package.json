@@ -12,12 +12,9 @@
 	},
 	"scripts": {
 		"start": "node src/index.js",
-		"build":
-			"webpack --config webpack.config.js && pkg --targets latest --out-path build/ package.json",
-		"build-win":
-			"webpack --config webpack.config.js && pkg --targets latest-win-x64 --out-path build/ package.json",
-		"build-winx86":
-			"webpack --config webpack.config.js && pkg --targets latest-win-x86 --out-path build/ package.json"
+		"build": "webpack --config webpack.config.js && pkg --out-path build/ package.json",
+		"build-win": "webpack --config webpack.config.js && pkg --targets win-x64 --out-path build/ package.json",
+		"build-winx86": "webpack --config webpack.config.js && pkg --targets win-x86 --out-path build/ package.json"
 	},
 	"dependencies": {
 		"babel-core": "^6.26.0",
@@ -38,6 +35,11 @@
 		"winston": "^2.4.0"
 	},
 	"pkg": {
-		"assets": ["static/*", "src/templates/**/*.ejs"]
+		"assets": [
+			"static/*",
+			"db-empty.sqlite3",
+			"bower_components/*",
+			"templates/**/*.ejs"
+		]
 	}
 }

@@ -1,35 +1,32 @@
 const fs = require("fs");
 const path = require("path");
 
-module.exports.setupDbStructure = (db, root) => {
+const copyFile = (source, target) =>
+	new Promise((resolve, reject) => {
+		const rd = fs.createReadStream(source);
+
+		rd.on("error", reject);
+
+		const wr = fs.createWriteStream(target);
+		wr.on("error", reject);
+		wr.on("close", resolve);
+		rd.pipe(wr);
+	});
+
+const copyFileSync = (source, destination) => {
+	fs.writeFileSync(destination, fs.readFileSync(source));
+};
+
+module.exports.setupDbStructure = root => {
 	if (
-		fs.readFileSync(path.resolve(root, "..", "db.sqlite3"), {
+		fs.readFileSync(path.resolve(root, "db.sqlite3"), {
 			encoding: "utf-8"
 		}).length === 0
 	) {
-		db.serialize(() => {
-			const tables = fs.readdirSync(
-				path.resolve(root, "..", "database", "structure")
-			);
-			tables.forEach(fileName => {
-				db.run(
-					fs.readFileSync(
-						path.resolve(root, "..", "database", "structure", fileName),
-						{ encoding: "utf-8" }
-					)
-				);
-			});
-
-			fs
-				.readFileSync(
-					path.resolve(root, "..", "database", "indicies.sqlite3.sql"),
-					{ encoding: "utf-8" }
-				)
-				.split("\n")
-				.forEach(index => {
-					db.run(index);
-				});
-		});
+		copyFileSync(
+			path.resolve(__dirname, "db-empty.sqlite3"),
+			path.resolve(root, "db.sqlite3")
+		);
 	}
 };
 

@@ -21,7 +21,7 @@ const {
 } = require("../../dateutils");
 
 const template = prepareTemplate(
-	path.resolve(APP_ROOT, "templates", "pages", "patient.ejs")
+	path.resolve(__dirname, "..", "..", "templates", "pages", "patient.ejs")
 );
 
 module.exports.get = [
