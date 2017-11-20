@@ -134,7 +134,5 @@ const httpServer = app.listen(PORT, "0.0.0.0", () => {
 		"Server running on",
 		"http://" + httpServer.address().address + ":" + httpServer.address().port
 	);
-	opn(
-		"http://" + httpServer.address().address + ":" + httpServer.address().port
-	);
+	opn("http://localhost" + ":" + httpServer.address().port);
 });
