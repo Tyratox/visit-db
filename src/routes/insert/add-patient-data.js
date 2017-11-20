@@ -68,8 +68,7 @@ module.exports.get = [
 		if (patientId) {
 			patient = await get(
 				db,
-				`
-				SELECT
+				`SELECT
 				cases.case_number,
 				cases.case_type_id as case_type,
 				patients.patient_number,

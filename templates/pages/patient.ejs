@@ -150,7 +150,7 @@
 					<h2>Eigene Felder</h2>
 					<div class="row repeatable">
 						<%-
-						locals.fields ? fields.map(({title, content}) => {
+						locals.fields && fields.length > 0 ? fields.map(({title, content}) => {
 							return `
 							<div class="col-12 col-md-6">
 								<div class="form-group">
@@ -172,8 +172,8 @@
 									>${content}</textarea>
 								</div>
 							</div>
-							`;}) : `
-							<div class="col-12 col-md-6">
+							`;}).join("") :
+							`<div class="col-12 col-md-6">
 								<div class="form-group">
 									<input
 										type="text"
