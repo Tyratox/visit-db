@@ -7,6 +7,8 @@ const db = require("./db");
 const logger = require("./logger");
 const { errors: celebrateErrors } = require("celebrate");
 
+global.APP_ROOT = path.resolve(__dirname, "..");
+
 const express = require("express");
 const expressSession = require("express-session");
 const bodyParser = require("body-parser");

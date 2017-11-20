@@ -16,7 +16,7 @@ const {
 const { unixTimestampToString } = require("../../dateutils");
 
 const template = prepareTemplate(
-	path.resolve(__dirname, "..", "..", "templates", "pages", "index.ejs")
+	path.resolve(APP_ROOT, "templates", "pages", "index.ejs")
 );
 
 module.exports.get = [
