@@ -29,7 +29,9 @@
 		"express": "^4.16.2",
 		"express-session": "^1.15.6",
 		"helmet": "^3.9.0",
+		"opn": "^5.1.0",
 		"sqlite3": "^3.1.13",
+		"sync-request": "^4.1.0",
 		"webpack": "^3.8.1",
 		"webpack-node-externals": "^1.6.0",
 		"winston": "^2.4.0"
