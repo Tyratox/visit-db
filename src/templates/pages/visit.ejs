@@ -21,13 +21,7 @@
 					<tr>
 						<td>Datum</td>
 						<td>
-							<%
-								let d = new Date(visit.date*1000),
-								    date = d.getDate() + "." + 
-									(d.getMonth() + 1) + "." + 
-									d.getFullYear();
-							%>
-							<%= date %>
+							<%= visit.date %>
 						</td>
 					</tr>
 					<tr>
@@ -102,7 +96,12 @@
 										<tr>
 											<td>Aktionen</td>
 											<td>
-												<a class="btn btn-danger" href="/delete/patient/${id}">Patient löschen</a>
+												<div class="pb-2">
+													<a href="/add-patient/${visit.id}?patient_id=${id}">Patient bearbeiten</a>
+												</div>
+												<div>
+													<a class="text-danger" href="/delete/patient/${id}">Patient löschen</a>
+												</div>
 											</td>
 										</tr>
 									</table>

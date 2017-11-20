@@ -11,48 +11,100 @@ const {
 	get,
 	exists,
 	findOrInsert,
-	findIdOrInsert
+	findIdOrInsert,
+	remove
 } = require("../../dbutils");
+
+const {
+	stringToUnixTimestamp,
+	unixTimestampToString
+} = require("../../dateutils");
 
 const template = prepareTemplate(
 	path.resolve(__dirname, "..", "..", "templates", "pages", "patient.ejs")
 );
 
-module.exports.get = async (request, response) => {
-	response.header("Content-Type", "text/html");
+module.exports.get = [
+	celebrate({
+		query: {
+			patient_id: Joi.number().positive()
+		}
+	}),
+	async (request, response) => {
+		response.header("Content-Type", "text/html");
 
-	const { visitId } = request.params;
+		const { visitId } = request.params;
+		const { patient_id: patientId } = request.query;
 
-	const substances = await loadAll(
-			db,
-			"SELECT id, atc_code, name FROM substances"
-		),
-		caseTypes = await loadAll(
-			db,
-			"SELECT id, abbreviation, name FROM case_types"
-		),
-		visit = await get(
-			db,
-			`SELECT date,
-			duration,
-			patient_count,
-			visit_types.name as visit_type_name,
-			users.username as username,
-			hospitals.name as hospital_name,
-			disciplines.name as discipline_name,
-			stations.name as station_name
-			FROM visits
-			LEFT JOIN visit_types ON visits.visit_type_id=visit_types.id
-			LEFT JOIN users ON visits.user_id=users.id
-			LEFT JOIN hospitals ON visits.hospital_id=hospitals.id
-			LEFT JOIN disciplines ON visits.discipline_id=disciplines.id
-			LEFT JOIN stations ON visits.station_id=stations.id
-			WHERE visits.id = ?`,
-			[visitId]
+		const substances = await loadAll(
+				db,
+				"SELECT id, atc_code, name FROM substances"
+			),
+			caseTypes = await loadAll(
+				db,
+				"SELECT id, abbreviation, name FROM case_types"
+			),
+			visit = await get(
+				db,
+				`SELECT date,
+				duration,
+				patient_count,
+				visit_types.name as visit_type_name,
+				users.username as username,
+				hospitals.name as hospital_name,
+				disciplines.name as discipline_name,
+				stations.name as station_name
+				FROM visits
+				LEFT JOIN visit_types ON visits.visit_type_id=visit_types.id
+				LEFT JOIN users ON visits.user_id=users.id
+				LEFT JOIN hospitals ON visits.hospital_id=hospitals.id
+				LEFT JOIN disciplines ON visits.discipline_id=disciplines.id
+				LEFT JOIN stations ON visits.station_id=stations.id
+				WHERE visits.id = ?`,
+				[visitId]
+			);
+		let patient = {};
+
+		if (patientId) {
+			patient = await get(
+				db,
+				`
+				SELECT
+				cases.case_number,
+				cases.case_type_id as case_type,
+				patients.patient_number,
+				patients.substance_id as substance,
+				patients.gender,
+				patients.date_of_birth,
+				patients.visit_id
+				FROM patients
+				LEFT JOIN cases ON patients.case_id=cases.id
+				WHERE patients.id = ?`,
+				[patientId]
+			);
+			patient.fields = await loadAll(
+				db,
+				`
+				SELECT
+				patient_fields.title,
+				patient_fields.content
+				FROM patient_fields
+				WHERE patient_fields.patient_id = ?`,
+				[patientId]
+			);
+			patient.date_of_birth = unixTimestampToString(patient.date_of_birth);
+		}
+
+		response.end(
+			template({
+				visit: { ...visit, date: unixTimestampToString(visit.date) },
+				substances,
+				caseTypes,
+				...patient
+			})
 		);
-
-	response.end(template({ visit, substances, caseTypes }));
-};
+	}
+];
 
 module.exports.post = [
 	celebrate({
@@ -79,6 +131,9 @@ module.exports.post = [
 					.max(500)
 					.allow("")
 			)
+		},
+		query: {
+			patient_id: Joi.number().positive()
 		}
 	}),
 	async (request, response) => {
@@ -93,6 +148,8 @@ module.exports.post = [
 			field_title,
 			field_content
 		} = request.body;
+
+		const { patient_id: idToUpdate } = request.query;
 
 		if (substance && !await exists(db, "substances", "id", substance)) {
 			return next(new Error("The received substance id is invalid!"));
@@ -113,18 +170,43 @@ module.exports.post = [
 			case_number
 		);
 
-		const patientId = await insert(
-			db,
-			"INSERT INTO patients(case_id, patient_number, substance_id, gender, date_of_birth, visit_id) VALUES(?, ?, ?, ?, ?, ?)",
-			[
-				caseId,
-				patient_number,
-				substance ? substance : null,
-				gender,
-				date_of_birth,
-				visitId
-			]
-		);
+		let patientId;
+
+		if (idToUpdate) {
+			patientId = idToUpdate;
+
+			await update(
+				db,
+				`
+				UPDATE patients
+				SET case_id = ?,
+				patient_number = ?,
+				substance_id = ?,
+				gender = ?,
+				date_of_birth = ?
+			`,
+				[
+					caseId,
+					patient_number,
+					substance ? substance : null,
+					gender,
+					stringToUnixTimestamp(date_of_birth)
+				]
+			);
+		} else {
+			patientId = await insert(
+				db,
+				"INSERT INTO patients(case_id, patient_number, substance_id, gender, date_of_birth, visit_id) VALUES(?, ?, ?, ?, ?, ?)",
+				[
+					caseId,
+					patient_number,
+					substance ? substance : null,
+					gender,
+					stringToUnixTimestamp(date_of_birth),
+					visitId
+				]
+			);
+		}
 
 		update(db, "UPDATE cases SET case_type_id = ?", [case_type])
 			.then(() => {
@@ -133,11 +215,18 @@ module.exports.post = [
 						if (!title || !field_content[index]) {
 							return Promise.resolve();
 						}
-						return insert(
+
+						return remove(
 							db,
-							"INSERT INTO patient_fields (title, content, patient_id) VALUES (?, ?, ?)",
-							[title, field_content[index], patientId]
-						);
+							"DELETE FROM patient_fields WHERE patient_id = ?",
+							[patientId]
+						).then(() => {
+							return insert(
+								db,
+								"INSERT INTO patient_fields (title, content, patient_id) VALUES (?, ?, ?)",
+								[title, field_content[index], patientId]
+							);
+						});
 					})
 				);
 			})

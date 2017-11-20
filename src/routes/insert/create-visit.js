@@ -13,6 +13,7 @@ const {
 	findOrInsert,
 	findIdOrInsert
 } = require("../../dbutils");
+const { unixTimestampToString } = require("../../dateutils");
 
 const template = prepareTemplate(
 	path.resolve(__dirname, "..", "..", "templates", "pages", "index.ejs")
@@ -59,9 +60,8 @@ module.exports.get = [
 				`,
 				[visitIdToUpdate]
 			);
-			const d = new Date(current_values.date * 1000);
-			current_values.date =
-				d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear();
+
+			current_values.date = unixTimestampToString(current_values.date);
 		}
 
 		response.end(
@@ -133,11 +133,6 @@ module.exports.post = [
 
 		//Find the right user
 		const userId = await findIdOrInsert(db, "users", "username", username),
-			jsDate = new Date(
-				date.substring(6),
-				date.substring(3, 5) - 1,
-				date.substring(0, 2)
-			),
 			stationId = await findIdOrInsert(db, "stations", "name", station);
 
 		let visitId;
@@ -159,7 +154,7 @@ module.exports.post = [
 				WHERE visits.id=?
 				`,
 				[
-					jsDate.getTime() / 1000,
+					stringToUnixTimestamp(date),
 					duration,
 					patient_count,
 					visit_type,
@@ -186,7 +181,7 @@ module.exports.post = [
 				station_id
 			) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`,
 				[
-					jsDate.getTime() / 1000,
+					stringToUnixTimestamp(date),
 					duration,
 					patient_count,
 					visit_type,

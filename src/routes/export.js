@@ -12,6 +12,8 @@ const {
 	findOrInsert
 } = require("../dbutils");
 
+const { unixTimestampToString } = require("../dateutils");
+
 module.exports = [
 	celebrate({
 		query: {
@@ -61,11 +63,10 @@ module.exports = [
 				$visitTypeId: visitTypeId ? visitTypeId : undefined
 			}
 		)).map(row => {
-			const d = new Date(row.date * 1000);
 			return (
 				'"' +
 				[
-					d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear(),
+					unixTimestampToString(row.date),
 					row.duration,
 					row.patient_count,
 					row.username,

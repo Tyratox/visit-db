@@ -13,15 +13,10 @@ const {
 	findOrInsert
 } = require("../dbutils");
 
-const toTimestamp = date => {
-	return (
-		new Date(
-			date.substring(6),
-			date.substring(3, 5) - 1,
-			date.substring(0, 2)
-		).getTime() / 1000
-	);
-};
+const {
+	stringToUnixTimestamp,
+	unixTimestampToString
+} = require("../dateutils");
 
 const template = prepareTemplate(
 	path.resolve(__dirname, "..", "templates", "pages", "visits.ejs")
@@ -64,7 +59,7 @@ module.exports.get = [
 		const page = request.params.page ? request.params.page : 1;
 		const filter = request.query.filter ? request.query.filter : {};
 
-		const visits = await loadAll(
+		const visits = (await loadAll(
 			db,
 			`SELECT
 			visits.id as id,
@@ -97,14 +92,20 @@ module.exports.get = [
 			{
 				$offset: 100 * (page - 1),
 				$visitTypeId: filter.visit_type_id ? filter.visit_type_id : undefined,
-				$dateFrom: filter.date_from ? toTimestamp(filter.date_from) : undefined,
-				$dateTo: filter.date_to ? toTimestamp(filter.date_to) : undefined,
+				$dateFrom: filter.date_from
+					? stringToUnixTimestamp(filter.date_from)
+					: undefined,
+				$dateTo: filter.date_to
+					? stringToUnixTimestamp(filter.date_to)
+					: undefined,
 				$userId: filter.user_id ? filter.user_id : undefined,
 				$hospitalId: filter.hospital_id ? filter.hospital_id : undefined,
 				$disciplineId: filter.discipline_id ? filter.discipline_id : undefined,
 				$stationId: filter.station_id ? filter.station_id : undefined
 			}
-		);
+		)).map(visit => {
+			return { ...visit, date: unixTimestampToString(visit.date) };
+		});
 
 		const { count: visitCount } = await get(
 			db,

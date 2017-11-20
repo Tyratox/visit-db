@@ -13,6 +13,8 @@ const {
 	findOrInsert
 } = require("../dbutils");
 
+const { unixTimestampToString } = require("../dateutils");
+
 const template = prepareTemplate(
 	path.resolve(__dirname, "..", "templates", "pages", "visit.ejs")
 );
@@ -28,7 +30,7 @@ module.exports.get = [
 
 		const { visitId } = request.params;
 
-		const visit = await get(
+		let visit = await get(
 			db,
 			`SELECT
 			visits.id as id,
@@ -50,6 +52,8 @@ module.exports.get = [
 			`,
 			[visitId]
 		);
+
+		visit.date = unixTimestampToString(visit.date);
 
 		const patients = await Promise.all(
 			(await loadAll(
@@ -80,7 +84,11 @@ module.exports.get = [
 				`,
 					[patient.id]
 				).then(fields => {
-					return Promise.resolve({ ...patient, fields });
+					return Promise.resolve({
+						...patient,
+						date_of_birth: unixTimestampToString(patient.date_of_birth),
+						fields
+					});
 				});
 			})
 		);

@@ -8,9 +8,9 @@
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
-							<th>
+							<!-- <th>
 								ID
-							</th>
+							</th> -->
 							<th>
 								Typ
 								<a data-toggle="collapse" href="#type-filter" aria-expanded="false" aria-controls="filters">
@@ -161,16 +161,11 @@
 					</thead>
 					<tbody>
 						<%- visits.map((visit) => {
-							const d = new Date(visit.date*1000),
-								date = d.getDate() + "." +
-										(d.getMonth()+1) + "." +
-										d.getFullYear();
-
 							return `
 								<tr data-clickable="/visit/${visit.id}">
-									<td>${visit.id}</td>
+									<!-- <td>${visit.id}</td> -->
 									<td>${visit.visit_type_name}</td>
-									<td>${date}</td>
+									<td>${visit.date}</td>
 									<td>${visit.username}</td>
 									<td>${visit.hospital_name}</td>
 									<td>${visit.discipline_name}</td>
