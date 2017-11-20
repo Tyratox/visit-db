@@ -4,18 +4,27 @@
 	"main": "src/index.js",
 	"author": "Tyratox",
 	"license": "UNLICENSED",
-	"bin": "src/index.js",
+	"bin": "build/compiled.js",
 	"devDependencies": {
 		"eslint": "^4.10.0",
-		"pkg": "^4.2.5",
+		"pkg": "^4.3.0-beta.1",
 		"typescript": "^2.5.3"
 	},
 	"scripts": {
 		"start": "node src/index.js",
-		"nexe": "nexe src/index.js",
-		"build": "pkg --out-path build/ package.json"
+		"build":
+			"webpack --config webpack.config.js && pkg --targets latest --out-path build/ package.json",
+		"build-win":
+			"webpack --config webpack.config.js && pkg --targets latest-win-x64 --out-path build/ package.json",
+		"build-winx86":
+			"webpack --config webpack.config.js && pkg --targets latest-win-x86 --out-path build/ package.json"
 	},
 	"dependencies": {
+		"babel-core": "^6.26.0",
+		"babel-loader": "^7.1.2",
+		"babel-plugin-transform-class-properties": "^6.24.1",
+		"babel-plugin-transform-object-rest-spread": "^6.26.0",
+		"babel-preset-env": "^1.6.1",
 		"body-parser": "^1.18.2",
 		"celebrate": "^7.0.1",
 		"compression": "^1.7.1",
@@ -24,12 +33,11 @@
 		"express-session": "^1.15.6",
 		"helmet": "^3.9.0",
 		"sqlite3": "^3.1.13",
+		"webpack": "^3.8.1",
+		"webpack-node-externals": "^1.6.0",
 		"winston": "^2.4.0"
 	},
 	"pkg": {
-		"assets": [
-			"static/*",
-			"src/templates/**/*.ejs"
-		]
+		"assets": ["static/*", "src/templates/**/*.ejs"]
 	}
 }

@@ -12,6 +12,8 @@ const compression = require("compression");
 
 const { setupDbStructure } = require("./dbutils");
 
+global.APP_ROOT = __dirname;
+
 process.on("uncaughtException", err => {
 	logger.log("error", err);
 });
