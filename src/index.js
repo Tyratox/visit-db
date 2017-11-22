@@ -33,8 +33,12 @@ try {
 			logger.log("info", "response: " + response);
 
 			if (response === "pong") {
-				logger.log("info", "shutting down..");
+				logger.log("info", "opening iexplore.exe");
 				opn("http://" + ip + ":" + PORT);
+				logger.log("info", "waiting 2000ms to quit..");
+				let waitTill = new Date(new Date().getTime() + 2000);
+				
+				while(waitTill > new Date()){}
 				process.exit();
 			}
 		} catch (err) {

@@ -1,7 +1,11 @@
 (function($) {
 	$('[data-toggle="tooltip"]').tooltip();
 
-	document.querySelectorAll(".awesomplete-label").forEach(function(el) {
+	var labels = document.querySelectorAll(".awesomplete-label");
+
+	for(var i=0;i<labels.length;i++){
+		var el = labels[i];
+		
 		var list = [],
 			values = el.getAttribute("data-value").split(";"),
 			labels = el.getAttribute("data-label").split(";"),
@@ -40,9 +44,9 @@
 					.focus();
 			});
 		});
-	});
+	}
 
-	$(".awesomplete-placeholder").on("click", function() {
+	$(".awesomplete-placeholder").click(function() {
 		var $input = $(this)
 			.parent()
 			.find(".awesomplete-label");
@@ -51,7 +55,7 @@
 		$input.show().focus();
 	});
 
-	$(".repeat a.btn").on("click", function() {
+	$(".repeat a.btn").click(function() {
 		var $before = $(this).parent();
 
 		var $template = $(this)
@@ -64,7 +68,7 @@
 		$template.insertBefore($before);
 	});
 
-	$("[data-clickable]").on("click", function() {
+	$("[data-clickable]").click(function() {
 		window.location = $(this).attr("data-clickable");
 	});
 })(jQuery);
