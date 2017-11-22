@@ -33,7 +33,7 @@ try {
 			logger.log("info", "response: " + response);
 
 			if (response === "pong") {
-				logger.log("info", "opening iexplore.exe");
+				logger.log("info", "opening browser");
 				opn("http://" + ip + ":" + PORT);
 				logger.log("info", "waiting 2000ms to quit..");
 				let waitTill = new Date(new Date().getTime() + 2000);
