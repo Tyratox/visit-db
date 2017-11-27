@@ -28,7 +28,14 @@ module.exports = [
 		const rows = (await loadAll(
 			db,
 			`SELECT
-			patients.id,
+			interventions.id,
+			interventions.drug,
+			interventions.problem,
+			interventions.suggestion,
+			intervention_problems.name as problem_category,
+			intervention_reasons.name as reason_category,
+			intervention_results.name as result_category,
+			intervention_types.name as type_category,
 			patients.patient_number,
 			patients.date_of_birth,
 			patients.gender,
@@ -46,7 +53,13 @@ module.exports = [
 			hospitals.abbreviation as hospital_abbreviation,
 			disciplines.name as discipline_name,
 			stations.name as station_name
-			FROM patients
+			FROM interventions
+			LEFT JOIN intervention_problems ON interventions.intervention_problem_id=intervention_problems.id
+			LEFT JOIN intervention_reasons ON interventions.intervention_reason_id=intervention_reasons.id
+			LEFT JOIN intervention_results ON interventions.intervention_result_id=intervention_results.id
+			LEFT JOIN intervention_types ON interventions.intervention_type_id=intervention_types.id
+			LEFT JOIN patients ON interventions.patient_id=patients.id
+			LEFT JOIN substances ON interventions.substance_id=substances.id
 			LEFT JOIN cases ON patients.case_id=cases.id
 			LEFT JOIN case_types ON cases.case_type_id=case_types.id
 			LEFT JOIN visits ON patients.visit_id=visits.id
@@ -66,21 +79,26 @@ module.exports = [
 				'"' +
 				[
 					unixTimestampToString(row.date),
-					row.duration,
-					row.patient_count,
 					row.username,
 					row.hospital_abbreviation,
 					row.hospital_name,
 					row.discipline_name,
 					row.station_name,
 					row.patient_number,
-					row.date_of_birth,
-					row.gender,
-					row.substance_name,
-					row.atc_code,
+					unixTimestampToString(row.date_of_birth),
+					row.gender === "male" ? "m" : "w",
 					row.case_number,
 					row.case_type_abbreviation,
-					row.case_type_name
+					row.case_type_name,
+					row.substance_name,
+					row.atc_code,
+					row.drug,
+					row.problem,
+					row.suggestion,
+					row.problem_category,
+					row.reason_category,
+					row.result_category,
+					row.type_category
 				].join('","') +
 				'"'
 			);
@@ -95,8 +113,6 @@ module.exports = [
 			'"' +
 				[
 					"Datum",
-					"Dauer (in Minuten)",
-					"Anzahl Patienten",
 					"Pharm.",
 					"Spital (Abkürzung)",
 					"Spital",
@@ -105,11 +121,18 @@ module.exports = [
 					"Patientennummer",
 					"Geburtsdatum",
 					"Geschlecht",
-					"Wirkstoff",
-					"ATC",
 					"Fallnummer",
 					"Falltyp (Abkürzung)",
-					"Falltyp"
+					"Falltyp",
+					"Wirkstoff",
+					"ATC",
+					"Betroffenes Medikament",
+					"Problem",
+					"Vorschlag",
+					"Erfasstes Problem",
+					"Grund der Interventiom",
+					"Intervention",
+					"Resultat der Intervention"
 				].join('","') +
 				'"' +
 				"\n" +
