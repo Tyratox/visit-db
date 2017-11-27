@@ -29,6 +29,7 @@
 						<div class="form-group">
 							<label for="visit_type">Was wurde getan?</label>
 							<select class="custom-select form-control" name="visit_type" id="visit_type" required>
+								<option <%- locals.visitType ? '' : 'selected' %>>Wähle einen Visitentyp</option>
 								<%- visitTypes.map(({id, name}, index) => {
 									return `<option ${
 										(locals.visitType ? (id === visitType) : (index === 0)) ? "selected" : ""

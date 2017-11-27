@@ -117,80 +117,225 @@
 								</select>
 							</div>
 						</div>
-						<div class="col-12 col-md-6">
-							<div class="form-group">
-								<label for="substance">Wirkstoff (optional)</label>
-								<% if(locals.substance){ %>
-									<input
-										type="text"
-										class="form-control filter awesomplete-placeholder"
-										readonly
-										value="<%= locals.substance ? substances.filter(s => s.id === substance)[0].name : '' %>"
-										>
-								<% } %>
-								<input
-									type="text"
-									class="form-control awesomplete-label"
-									style="<%= locals.substance ? 'display:none' : '' %>"
-									id="substance"
-									name="substance"
-									value="<%= locals.substance ? substance : '' %>"
-									placeholder="Gib hier den Namen des Wirkstoffes ein"
-									data-label="<%= substances.map(s => s.name + ' (' + s.atc_code + ')').join(';') %>"
-									data-value="<%= substances.map(s => s.id).join(';') %>"
-									data-minchars="1"
-									data-autofirst="true"
-									pattern="[0-9]+"
-								>
-							</div>
-						</div>
 					</div>
 				</section>
 				<section>
-					<h2>Eigene Felder</h2>
+					<h2>Interventionen</h2>
 					<div class="row repeatable">
 						<%-
-						locals.fields && fields.length > 0 ? fields.map(({title, content}) => {
+						locals.interventions && interventions.length > 0 ? interventions.map(({
+							drug,
+							problem,
+							suggestion,
+							substance_id,
+							intervention_problem_id,
+							intervention_reason_id,
+							intervention_type_id,
+							intervention_result_id
+						}) => {
 							return `
-							<div class="col-12 col-md-6">
-								<div class="form-group">
-									<input
-										type="text"
-										class="form-control"
-										name="field_title[]"
-										value="${title}"
-										placeholder="Gib hier die Überschrift des Feldes ein"
-									>
+							<div class="col-12 mb-2 pb-2">
+								<div class="row">
+									<div class="col-12 col-md-6">
+										<div class="form-group">
+											<label>Wirkstoff</label>
+											${
+												locals.substance_id ?
+												`<input
+												type="text"
+												class="form-control filter awesomplete-placeholder"
+												readonly
+												value="${locals.substance_id ? substances.filter(d => d.id === substance_id)[0].name : ''}"
+												>` : ''
+											}
+											<input
+												type="text"
+												class="form-control awesomplete-label"
+												name="intervention_substance_id[]"
+												style="${locals.substance_id ? "display:none;" : ""}"
+												value="${locals.substance_id ? locals.substance_id : ""}"
+												placeholder="Gib hier den Namen des Wirkstoffes ein"
+												data-label="${substances.map(s => s.name + ' (' + s.atc_code + ')').join(';')}"
+												data-value="${substances.map(s => s.id).join(';')}"
+												data-minchars="1"
+												data-autofirst="true"
+												pattern="[0-9]+"
+											>
+										</div>
+										<div class="form-group">
+											<label>Betroffenes Medikament</label>
+											<input
+												type="text"
+												class="form-control"
+												name="intervention_drug[]"
+												value="${drug}"
+												placeholder="Gib hier den Namen des betroffenen Medikamentes ein"
+												required
+											>
+										</div>
+										<div class="form-group">
+											<label>Problem</label>
+											<textarea
+												type="text"
+												class="form-control"
+												name="intervention_problem[]"
+												rows="5"
+												placeholder="Beschreibe hier das Problem"
+											>${problem}</textarea>
+										</div>
+										<div class="form-group">
+											<label>Vorschlag</label>
+											<textarea
+												type="text"
+												class="form-control"
+												name="intervention_suggestion[]"
+												rows="5"
+												placeholder="Gib hier einen Lösungsvorschlag ein"
+											>${suggestion}</textarea>
+										</div>
+									</div>
+									<div class="col-12 col-md-6">
+										<div class="form-group">
+											<label>Erfasstes Problem</label>
+											<select class="custom-select form-control" name="intervention_problem_id[]" required>
+												<option value="">Wähle eine Problemklasse</option>
+												${interventionProblems.map(({id, name}, index) => {
+													return `<option
+														${id === intervention_problem_id ? "selected" : ""}
+														value=${id}
+														>${name}</option>`;
+												}).join("")}
+											</select>
+										</div>
+										<div class="form-group">
+											<label>Grund der Intervention</label>
+											<select class="custom-select form-control" name="intervention_reason_id[]" required>
+												<option value="">Wähle den Grund den Intervention</option>
+												${interventionReasons.map(({id, name}, index) => {
+													return `<option
+														${id === intervention_reason_id ? "selected" : ""}
+														value=${id}
+													>${name}</option>`;
+												}).join("")}
+											</select>
+										</div>
+										<div class="form-group">
+											<label>Intervention</label>
+											<select class="custom-select form-control" name="intervention_type_id[]" required>
+												<option value="">Wähle den Typ den Intervention</option>
+												${interventionTypes.map(({id, name}, index) => {
+													return `<option
+													${id === intervention_type_id ? "selected" : ""}
+													value=${id}
+													>${name}</option>`;
+												}).join("")}
+											</select>
+										</div>
+										<div class="form-group">
+											<label>Resultat der Intervention</label>
+											<select class="custom-select form-control" name="intervention_result_id[]">
+												<option value="">Noch kein Resultat</option>
+												${interventionResults.map(({id, name}, index) => {
+													return `<option
+													${id === intervention_result_id ? "selected" : ""}
+													value=${id}
+													>${name}</option>`;
+												}).join("")}
+											</select>
+										</div>
+									</div>
 								</div>
-								<div class="form-group">
-									<textarea
-										type="text"
-										class="form-control"
-										name="field_content[]"
-										rows="5"
-										placeholder="Gib hier den Inhalt des Feldes ein"
-									>${content}</textarea>
-								</div>
+								<hr>
 							</div>
 							`;}).join("") :
-							`<div class="col-12 col-md-6">
-								<div class="form-group">
-									<input
-										type="text"
-										class="form-control"
-										name="field_title[]"
-										placeholder="Gib hier die Überschrift des Feldes ein"
-									>
+							`<div class="col-12 mb-2 pb-2">
+								<div class="row">
+									<div class="col-12 col-md-6">
+										<div class="form-group">
+											<label>Wirkstoff</label>
+											<input
+												type="text"
+												class="form-control awesomplete-label"
+												name="intervention_substance_id[]"
+												placeholder="Gib hier den Namen des Wirkstoffes ein"
+												data-label="${substances.map(s => s.name + ' (' + s.atc_code + ')').join(';')}"
+												data-value="${substances.map(s => s.id).join(';')}"
+												data-minchars="1"
+												data-autofirst="true"
+												pattern="[0-9]+"
+											>
+										</div>
+										<div class="form-group">
+											<label>Betroffenes Medikament</label>
+											<input
+												type="text"
+												class="form-control"
+												name="intervention_drug[]"
+												placeholder="Gib hier den Namen des betroffenen Medikamentes ein"
+												required
+											>
+										</div>
+										<div class="form-group">
+											<label>Problem</label>
+											<textarea
+												type="text"
+												class="form-control"
+												name="intervention_problem[]"
+												rows="5"
+												placeholder="Beschreibe hier das Problem"
+											></textarea>
+										</div>
+										<div class="form-group">
+											<label>Vorschlag</label>
+											<textarea
+												type="text"
+												class="form-control"
+												name="intervention_suggestion[]"
+												rows="5"
+												placeholder="Gib hier einen Lösungsvorschlag ein"
+											></textarea>
+										</div>
+									</div>
+									<div class="col-12 col-md-6">
+										<div class="form-group">
+											<label>Erfasstes Problem</label>
+											<select class="custom-select form-control" name="intervention_problem_id[]" required>
+												<option value="" selected>Wähle eine Problemklasse</option>
+												${interventionProblems.map(({id, name}, index) => {
+													return `<option value=${id}>${name}</option>`;
+												}).join("")}
+											</select>
+										</div>
+										<div class="form-group">
+											<label>Grund der Intervention</label>
+											<select class="custom-select form-control" name="intervention_reason_id[]" required>
+												<option value="" selected>Wähle den Grund den Intervention</option>
+												${interventionReasons.map(({id, name}, index) => {
+													return `<option value=${id}>${name}</option>`;
+												}).join("")}
+											</select>
+										</div>
+										<div class="form-group">
+											<label>Intervention</label>
+											<select class="custom-select form-control" name="intervention_type_id[]" required>
+												<option value="" selected>Wähle den Typ den Intervention</option>
+												${interventionTypes.map(({id, name}, index) => {
+													return `<option value=${id}>${name}</option>`;
+												}).join("")}
+											</select>
+										</div>
+										<div class="form-group">
+											<label>Resultat der Intervention</label>
+											<select class="custom-select form-control" name="intervention_result_id[]">
+												<option value="" selected>Noch kein Resultat</option>
+												${interventionResults.map(({id, name}, index) => {
+													return `<option value=${id}>${name}</option>`;
+												}).join("")}
+											</select>
+										</div>
+									</div>
 								</div>
-								<div class="form-group">
-									<textarea
-										type="text"
-										class="form-control"
-										name="field_content[]"
-										rows="5"
-										placeholder="Gib hier den Inhalt des Feldes ein"
-									></textarea>
-								</div>
+								<hr>
 							</div>
 							`;
 						%>

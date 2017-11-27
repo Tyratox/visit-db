@@ -28,7 +28,7 @@ module.exports = [
 		);
 		remove(db, "DELETE FROM patients WHERE id=?", [request.params.patientId])
 			.then(() => {
-				return remove(db, "DELETE FROM patient_fields WHERE patient_id=?", [
+				return remove(db, "DELETE FROM interventions WHERE patient_id=?", [
 					request.params.patientId
 				]);
 			})

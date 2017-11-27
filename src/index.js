@@ -22,10 +22,10 @@ try {
 		logger.log("info", "checking " + ip + " ...");
 		try {
 			const response = request("GET", "http://" + ip + ":" + PORT + "/ping", {
-				timeout: 2000,
+				timeout: 1000,
 				retry: true,
-				retryDelay: 100,
-				maxRetries: 2
+				retryDelay: 50,
+				maxRetries: 1
 			})
 				.getBody()
 				.toString();
@@ -37,8 +37,8 @@ try {
 				opn("http://" + ip + ":" + PORT);
 				logger.log("info", "waiting 2000ms to quit..");
 				let waitTill = new Date(new Date().getTime() + 2000);
-				
-				while(waitTill > new Date()){}
+
+				while (waitTill > new Date()) {}
 				process.exit();
 			}
 		} catch (err) {
@@ -51,7 +51,7 @@ try {
 }
 
 const { setupDbStructure } = require("./dbutils");
-setupDbStructure(process.cwd());
+setupDbStructure(__dirname);
 
 const db = require("./db");
 const { errors: celebrateErrors } = require("celebrate");
@@ -124,8 +124,9 @@ app.get("/ping", (request, response, next) => response.end("pong"));
 
 app.use(celebrateErrors());
 app.use((error, request, response, next) => {
-	response.write("<h1>Fehler! Bitte melden!</h1>");
-	response.write("<code>" + JSON.stringify(error) + "</code>");
+	response.header("Content-Type", "text/html");
+	response.write("<h1>Fehler!</h1>");
+	response.write("<code>" + error.toString() + "</code>");
 	response.end();
 });
 

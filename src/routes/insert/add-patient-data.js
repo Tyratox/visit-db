@@ -44,6 +44,22 @@ module.exports.get = [
 				db,
 				"SELECT id, abbreviation, name FROM case_types"
 			),
+			interventionProblems = await loadAll(
+				db,
+				"SELECT id, name FROM intervention_problems"
+			),
+			interventionReasons = await loadAll(
+				db,
+				"SELECT id, name FROM intervention_reasons"
+			),
+			interventionResults = await loadAll(
+				db,
+				"SELECT id, name FROM intervention_results"
+			),
+			interventionTypes = await loadAll(
+				db,
+				"SELECT id, name FROM intervention_types"
+			),
 			visit = await get(
 				db,
 				`SELECT date,
@@ -72,7 +88,6 @@ module.exports.get = [
 				cases.case_number,
 				cases.case_type_id as case_type,
 				patients.patient_number,
-				patients.substance_id as substance,
 				patients.gender,
 				patients.date_of_birth,
 				patients.visit_id
@@ -81,14 +96,20 @@ module.exports.get = [
 				WHERE patients.id = ?`,
 				[patientId]
 			);
-			patient.fields = await loadAll(
+			patient.interventions = await loadAll(
 				db,
 				`
 				SELECT
-				patient_fields.title,
-				patient_fields.content
-				FROM patient_fields
-				WHERE patient_fields.patient_id = ?`,
+				drug,
+				problem,
+				suggestion,
+				substance_id,
+				intervention_problem_id,
+				intervention_reason_id,
+				intervention_type_id,
+				intervention_result_id
+				FROM interventions
+				WHERE interventions.patient_id = ?`,
 				[patientId]
 			);
 			patient.date_of_birth = unixTimestampToString(patient.date_of_birth);
@@ -99,6 +120,10 @@ module.exports.get = [
 				visit: { ...visit, date: unixTimestampToString(visit.date) },
 				substances,
 				caseTypes,
+				interventionProblems,
+				interventionReasons,
+				interventionResults,
+				interventionTypes,
 				...patient
 			})
 		);
@@ -121,25 +146,36 @@ module.exports.post = [
 			gender: Joi.string()
 				.valid("male", "female")
 				.required(),
-			substance: Joi.number()
-				.positive()
-				.allow(""),
-			field_title: Joi.array().items(
+			intervention_drug: Joi.array().items(
 				Joi.string()
-					.max(25)
+					.max(100)
 					.allow("")
 			),
-			field_content: Joi.array().items(
+			intervention_problem: Joi.array().items(
 				Joi.string()
-					.max(500)
+					.max(100)
 					.allow("")
-			)
+			),
+			intervention_suggestion: Joi.array().items(
+				Joi.string()
+					.max(100)
+					.allow("")
+			),
+			intervention_substance_id: Joi.array().items(Joi.number().positive()),
+			intervention_problem_id: Joi.array().items(Joi.number().positive()),
+			intervention_reason_id: Joi.array().items(Joi.number().positive()),
+			intervention_result_id: Joi.array().items(
+				Joi.number()
+					.positive()
+					.allow("")
+			),
+			intervention_type_id: Joi.array().items(Joi.number().positive())
 		},
 		query: {
 			patient_id: Joi.number().positive()
 		}
 	}),
-	async (request, response) => {
+	async (request, response, next) => {
 		const { visitId } = request.params;
 		let {
 			case_number,
@@ -150,25 +186,71 @@ module.exports.post = [
 			substance
 		} = request.body;
 
-		const field_title = request.body.field_title
-			? request.body.field_title
-			: [];
-		const field_content = request.body.field_content
-			? request.body.field_content
-			: [];
-
 		const { patient_id: idToUpdate } = request.query;
+
+		const intervention_drug = request.body.intervention_drug
+				? request.body.intervention_drug
+				: [],
+			intervention_problem = request.body.intervention_problem
+				? request.body.intervention_problem
+				: [],
+			intervention_suggestion = request.body.intervention_suggestion
+				? request.body.intervention_suggestion
+				: [],
+			intervention_substance_id = request.body.intervention_substance_id
+				? request.body.intervention_substance_id
+				: [],
+			intervention_problem_id = request.body.intervention_problem_id
+				? request.body.intervention_problem_id
+				: [],
+			intervention_reason_id = request.body.intervention_reason_id
+				? request.body.intervention_reason_id
+				: [],
+			intervention_result_id = request.body.intervention_result_id
+				? request.body.intervention_result_id
+				: [],
+			intervention_type_id = request.body.intervention_type_id
+				? request.body.intervention_type_id
+				: [];
+
+		if (
+			intervention_drug.length !== intervention_problem.length ||
+			intervention_problem.length !== intervention_suggestion.length ||
+			intervention_suggestion.length !== intervention_substance_id.length ||
+			intervention_substance_id.length !== intervention_problem_id.length ||
+			intervention_problem_id.length !== intervention_reason_id.length ||
+			intervention_reason_id.length !== intervention_result_id.length ||
+			intervention_result_id.length !== intervention_type_id.length
+		) {
+			return next(
+				new Error("The received intervention array length(s) are invalid")
+			);
+		}
+
+		if (
+			(await Promise.all([
+				exists(db, "case_types", "id", case_type),
+				...intervention_substance_id.map(id =>
+					exists(db, "substances", "id", id)
+				),
+				...intervention_problem_id.map(id =>
+					exists(db, "intervention_problems", "id", id)
+				),
+				...intervention_reason_id.map(id =>
+					exists(db, "intervention_reasons", "id", id)
+				),
+				...intervention_result_id.map(id => id =>
+					id
+						? exists(db, "intervention_results", "id", id)
+						: Promise.resolve(true)
+				)
+			])).filter(el => !el).length > 0
+		) {
+			return next(new Error("Invalid id (length)!"));
+		}
 
 		if (substance && !await exists(db, "substances", "id", substance)) {
 			return next(new Error("The received substance id is invalid!"));
-		}
-
-		if (!await exists(db, "case_types", "id", case_type)) {
-			return next(new Error("The received case_type id is invalid!"));
-		}
-
-		if (field_title.length !== field_content.length) {
-			return next(new Error("The field title/content lengths don't match!"));
 		}
 
 		const caseId = await findIdOrInsert(
@@ -189,26 +271,18 @@ module.exports.post = [
 				UPDATE patients
 				SET case_id = ?,
 				patient_number = ?,
-				substance_id = ?,
 				gender = ?,
 				date_of_birth = ?
 			`,
-				[
-					caseId,
-					patient_number,
-					substance ? substance : null,
-					gender,
-					stringToUnixTimestamp(date_of_birth)
-				]
+				[caseId, patient_number, gender, stringToUnixTimestamp(date_of_birth)]
 			);
 		} else {
 			patientId = await insert(
 				db,
-				"INSERT INTO patients(case_id, patient_number, substance_id, gender, date_of_birth, visit_id) VALUES(?, ?, ?, ?, ?, ?)",
+				"INSERT INTO patients(case_id, patient_number, gender, date_of_birth, visit_id) VALUES(?, ?, ?, ?, ?)",
 				[
 					caseId,
 					patient_number,
-					substance ? substance : null,
 					gender,
 					stringToUnixTimestamp(date_of_birth),
 					visitId
@@ -218,25 +292,44 @@ module.exports.post = [
 
 		update(db, "UPDATE cases SET case_type_id = ?", [case_type])
 			.then(() => {
-				return Promise.all(
-					field_title.map((title, index) => {
-						if (!title || !field_content[index]) {
-							return Promise.resolve();
-						}
-
-						return remove(
-							db,
-							"DELETE FROM patient_fields WHERE patient_id = ?",
-							[patientId]
-						).then(() => {
+				return remove(db, "DELETE FROM interventions WHERE patient_id = ?", [
+					patientId
+				]).then(() => {
+					return Promise.all([
+						intervention_drug.map((drug, index) => {
 							return insert(
 								db,
-								"INSERT INTO patient_fields (title, content, patient_id) VALUES (?, ?, ?)",
-								[title, field_content[index], patientId]
+								`INSERT INTO
+							interventions (
+								drug,
+								problem,
+								suggestion,
+								patient_id,
+								substance_id,
+								intervention_problem_id,
+								intervention_reason_id,
+								intervention_type_id,
+								intervention_result_id
+							) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+								[
+									drug,
+									intervention_problem[index],
+									intervention_suggestion[index],
+									patientId,
+									intervention_substance_id[index]
+										? intervention_substance_id[index]
+										: null,
+									intervention_problem_id[index],
+									intervention_reason_id[index],
+									intervention_type_id[index],
+									intervention_result_id[index]
+										? intervention_result_id[index]
+										: null
+								]
 							);
-						});
-					})
-				);
+						})
+					]);
+				});
 			})
 			.then(() => {
 				response.redirect("/visit/" + visitId);

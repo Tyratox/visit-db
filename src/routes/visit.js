@@ -66,30 +66,41 @@ module.exports.get = [
 				cases.case_number,
 				case_types.abbreviation as case_type_abbreviation,
 				case_types.name as case_type_name,
-				substances.atc_code,
-				substances.name as substance_name,
 				case_types.abbreviation as case_type_abbreviation,
 				case_types.name as case_type_name
 				FROM patients
 				LEFT JOIN cases ON patients.case_id=cases.id
 				LEFT JOIN case_types ON cases.case_type_id=case_types.id
-				LEFT JOIN substances ON patients.substance_id=substances.id
 				WHERE patients.visit_id = ?
 			`,
 				[visitId]
 			)).map(patient => {
 				return loadAll(
 					db,
-					`SELECT title, content FROM
-				patient_fields
-				WHERE patient_id = ?
+					`SELECT
+					drug,
+					problem,
+					suggestion,
+					substances.name as substance_name,
+					substances.atc_code as substance_atc_code,
+					intervention_problems.name as problem_class,
+					intervention_reasons.name as reason_class,
+					intervention_types.name as type_class,
+					intervention_results.name as result_class
+					FROM interventions
+					LEFT JOIN substances ON interventions.substance_id=substances.id
+					LEFT JOIN intervention_problems ON interventions.intervention_problem_id=intervention_problems.id
+					LEFT JOIN intervention_reasons ON interventions.intervention_reason_id=intervention_reasons.id
+					LEFT JOIN intervention_types ON interventions.intervention_type_id=intervention_types.id
+					LEFT JOIN intervention_results ON interventions.intervention_result_id=intervention_results.id
+					WHERE interventions.patient_id = ?
 				`,
 					[patient.id]
-				).then(fields => {
+				).then(interventions => {
 					return Promise.resolve({
 						...patient,
 						date_of_birth: unixTimestampToString(patient.date_of_birth),
-						fields
+						interventions
 					});
 				});
 			})

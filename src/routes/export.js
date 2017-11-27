@@ -49,7 +49,6 @@ module.exports = [
 			FROM patients
 			LEFT JOIN cases ON patients.case_id=cases.id
 			LEFT JOIN case_types ON cases.case_type_id=case_types.id
-			LEFT JOIN substances ON patients.substance_id=substances.id
 			LEFT JOIN visits ON patients.visit_id=visits.id
 			LEFT JOIN visit_types ON visits.visit_type_id=visit_types.id
 			LEFT JOIN users ON visits.user_id=users.id

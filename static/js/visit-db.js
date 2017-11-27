@@ -1,11 +1,70 @@
 (function($) {
-	$('[data-toggle="tooltip"]').tooltip();
+	function onSelect(e) {
+		var el = e.currentTarget;
+		var rnd = Math.random()
+			.toString()
+			.substring(2);
 
-	var labels = document.querySelectorAll(".awesomplete-label");
+		$(el).before(
+			"<input id='tmp-" +
+				rnd +
+				"' class='" +
+				el.getAttribute("class") +
+				"' value='" +
+				e.originalEvent.text.label +
+				"' readonly />"
+		);
+		$(el).hide();
+		var $readonly = $("#tmp-" + rnd);
+		$readonly.removeAttr("id");
+		$readonly.one("click", function() {
+			$readonly.remove();
+			el.value = "";
+			$(el)
+				.show()
+				.focus();
+		});
+	}
 
-	for(var i=0;i<labels.length;i++){
-		var el = labels[i];
-		
+	function onPlaceholderClick(e) {
+		var $this = $(e.currentTarget);
+
+		var $input = $this.parent().find(".awesomplete-label");
+
+		$this.remove();
+		$input.val("");
+		$input.show().focus();
+	}
+
+	function onRepeatClick(e) {
+		var $this = $(e.currentTarget);
+
+		var $before = $this.parent();
+
+		var $template = $this
+			.closest(".repeatable")
+			.children()
+			.first()
+			.clone();
+		$template.find("input").val("");
+		$template.find("textarea").val("");
+		$template.find(".awesomplete-label[readonly]").remove();
+		$template.find(".awesomplete-label").show();
+		$template.find(".listening").removeClass("listening");
+		$template.insertBefore($before);
+
+		installListeners();
+	}
+
+	function onClickableClick(e) {
+		window.location = $(e.currentTarget).attr("data-clickable");
+	}
+
+	function labeledAwesomplete(el) {
+		if (el.hasAttribute("readonly")) {
+			return;
+		}
+
 		var list = [],
 			values = el.getAttribute("data-value").split(";"),
 			labels = el.getAttribute("data-label").split(";"),
@@ -25,50 +84,34 @@
 			list: list
 		});
 
-		el.addEventListener("awesomplete-select", function(e) {
-			$(el).before(
-				"<input id='tmp' class='" +
-					el.getAttribute("class") +
-					"' value='" +
-					e.text.label +
-					"' readonly />"
-			);
-			$(el).hide();
-			var $readonly = $("#tmp");
-			$readonly.removeAttr("id");
-			$readonly.on("click", function() {
-				$readonly.remove();
-				el.value = "";
-				$(el)
-					.show()
-					.focus();
-			});
-		});
+		$(el)
+			.on("awesomplete-select", onSelect)
+			.addClass("listening");
 	}
 
-	$(".awesomplete-placeholder").click(function() {
-		var $input = $(this)
-			.parent()
-			.find(".awesomplete-label");
-		$(this).remove();
-		$input.val("");
-		$input.show().focus();
-	});
+	function installListeners() {
+		$('[data-toggle="tooltip"]').tooltip();
 
-	$(".repeat a.btn").click(function() {
-		var $before = $(this).parent();
+		var labels = $(
+			".awesomplete-label[data-label][data-value][name]:not(.listening)"
+		);
 
-		var $template = $(this)
-			.closest(".repeatable")
-			.children()
-			.first()
-			.clone();
-		$template.find("input").val("");
-		$template.find("textarea").val("");
-		$template.insertBefore($before);
-	});
+		for (var i = 0; i < labels.length; i++) {
+			labeledAwesomplete(labels[i]);
+		}
 
-	$("[data-clickable]").click(function() {
-		window.location = $(this).attr("data-clickable");
-	});
+		$(".awesomplete-placeholder")
+			.off("click", onPlaceholderClick)
+			.on("click", onPlaceholderClick);
+
+		$(".repeat a.btn")
+			.off("click", onRepeatClick)
+			.on("click", onRepeatClick);
+
+		$("[data-clickable]")
+			.off("click", onClickableClick)
+			.on("click", onClickableClick);
+	}
+
+	installListeners();
 })(jQuery);

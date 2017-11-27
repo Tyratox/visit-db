@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const logger = require("./logger");
 
 const copyFile = (source, target) =>
 	new Promise((resolve, reject) => {
@@ -18,11 +19,22 @@ const copyFileSync = (source, destination) => {
 };
 
 module.exports.setupDbStructure = root => {
+	logger.log(
+		"info",
+		"check whether ",
+		path.resolve(root, "db.sqlite3"),
+		"exists..."
+	);
 	try {
 		fs.readFileSync(path.resolve(root, "db.sqlite3"), {
 			encoding: "utf-8"
 		});
+		logger.log("info", "exists!");
 	} catch (err) {
+		logger.log(
+			"info",
+			"doesn't exist! copy template to " + path.resolve(root, "db.sqlite3")
+		);
 		copyFileSync(
 			path.resolve(__dirname, "..", "db-empty.sqlite3"),
 			path.resolve(root, "db.sqlite3")
