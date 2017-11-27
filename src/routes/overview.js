@@ -30,6 +30,9 @@ module.exports.get = async (request, response) => {
 		COUNT(visits.id) as count,
 		SUM(visits.duration) as duration,
 		SUM(patient_count) as patient_count,
+		SUM(CASE WHEN visits.visit_type_id=1 THEN 1 ELSE 0 END) as count_type_1,
+		SUM(CASE WHEN visits.visit_type_id=2 THEN 1 ELSE 0 END) as count_type_2,
+		SUM(CASE WHEN visits.visit_type_id=3 THEN 1 ELSE 0 END) as count_type_3,
 		patients.correction_count
 		FROM visits
 		LEFT JOIN users ON visits.user_id=users.id
@@ -56,6 +59,9 @@ module.exports.get = async (request, response) => {
 		COUNT(visits.id) as count,
 		SUM(visits.duration) as duration,
 		SUM(patient_count) as patient_count,
+		SUM(CASE WHEN visits.visit_type_id=1 THEN 1 ELSE 0 END) as count_type_1,
+		SUM(CASE WHEN visits.visit_type_id=2 THEN 1 ELSE 0 END) as count_type_2,
+		SUM(CASE WHEN visits.visit_type_id=3 THEN 1 ELSE 0 END) as count_type_3,
 		patients.correction_count
 		FROM visits
 		LEFT JOIN hospitals ON visits.hospital_id=hospitals.id
@@ -82,6 +88,9 @@ module.exports.get = async (request, response) => {
 		COUNT(visits.id) as count,
 		SUM(visits.duration) as duration,
 		SUM(patient_count) as patient_count,
+		SUM(CASE WHEN visits.visit_type_id=1 THEN 1 ELSE 0 END) as count_type_1,
+		SUM(CASE WHEN visits.visit_type_id=2 THEN 1 ELSE 0 END) as count_type_2,
+		SUM(CASE WHEN visits.visit_type_id=3 THEN 1 ELSE 0 END) as count_type_3,
 		patients.correction_count
 		FROM visits
 		LEFT JOIN stations ON visits.station_id=stations.id

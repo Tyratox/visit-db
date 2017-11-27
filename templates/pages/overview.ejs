@@ -16,11 +16,44 @@
 				</thead>
 				<tbody>
 					<%-
-						visitsPerPerson.map(({user_id, name, count, patient_count, correction_count, duration}) => {
+						visitsPerPerson.map(({
+								user_id,
+								name,
+								count,
+								count_type_1,
+								count_type_2,
+								count_type_3,
+								patient_count,
+								correction_count,
+								duration
+							}) => {
 							return `
 								<tr data-clickable="/visits/?filter[user_id]=${user_id}">
 									<td>${name}</td>
-									<td>${count}</td>
+									<td>
+										${count + " "}
+										(<span
+											data-toggle="tooltip"
+											data-placement="top"
+											title="Visitenbegleitung"
+										>
+											${count_type_1}
+										</span> /
+										<span
+											data-toggle="tooltip"
+											data-placement="top"
+											title="Kardexvisite"
+										>
+											${count_type_2}
+										</span> /
+										<span
+											data-toggle="tooltip"
+											data-placement="top"
+											title="Kurvenscreening"
+										>
+											${count_type_3}
+										</span>)
+									</td>
 									<td>${patient_count}</td>
 									<td>${correction_count ? correction_count : 0}</td>
 									<td>${duration}</td>
@@ -50,6 +83,9 @@
 								name,
 								abbreviation,
 								count,
+								count_type_1,
+								count_type_2,
+								count_type_3,
 								patient_count,
 								correction_count,
 								duration
@@ -57,7 +93,30 @@
 							return `
 								<tr data-clickable="/visits/?filter[hospital_id]=${hospital_id}">
 									<td>${name} (${abbreviation})</td>
-									<td>${count}</td>
+									<td>
+										${count + " "}
+										(<span
+											data-toggle="tooltip"
+											data-placement="top"
+											title="Visitenbegleitung"
+										>
+											${count_type_1}
+										</span> /
+										<span
+											data-toggle="tooltip"
+											data-placement="top"
+											title="Kardexvisite"
+										>
+											${count_type_2}
+										</span> /
+										<span
+											data-toggle="tooltip"
+											data-placement="top"
+											title="Kurvenscreening"
+										>
+											${count_type_3}
+										</span>)
+									</td>
 									<td>${patient_count}</td>
 									<td>${correction_count ? correction_count : 0}</td>
 									<td>${duration}</td>
@@ -86,6 +145,9 @@
 								name,
 								hospital_abbreviation,
 								count,
+								count_type_1,
+								count_type_2,
+								count_type_3,
 								patient_count,
 								correction_count,
 								duration
@@ -93,7 +155,30 @@
 							return `
 								<tr data-clickable="/visits/?filter[station_id]=${station_id}">
 									<td>${name} (${hospital_abbreviation})</td>
-									<td>${count}</td>
+									<td>
+										${count + " "}
+										(<span
+											data-toggle="tooltip"
+											data-placement="top"
+											title="Visitenbegleitung"
+										>
+											${count_type_1}
+										</span> /
+										<span
+											data-toggle="tooltip"
+											data-placement="top"
+											title="Kardexvisite"
+										>
+											${count_type_2}
+										</span> /
+										<span
+											data-toggle="tooltip"
+											data-placement="top"
+											title="Kurvenscreening"
+										>
+											${count_type_3}
+										</span>)
+									</td>
 									<td>${patient_count}</td>
 									<td>${correction_count ? correction_count : 0}</td>
 									<td>${duration}</td>
