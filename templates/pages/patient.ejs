@@ -119,9 +119,9 @@
 						</div>
 					</div>
 				</section>
-				<section>
+				<section class="repeatable">
 					<h2>Interventionen</h2>
-					<div class="row repeatable">
+					<div class="row insert">
 						<%-
 						locals.interventions && interventions.length > 0 ? interventions.map(({
 							drug,
@@ -134,7 +134,7 @@
 							intervention_result_id
 						}) => {
 							return `
-							<div class="col-12 mb-2 pb-2">
+							<div class="col-12 mb-2 pb-2 repeat-el">
 								<div class="row">
 									<div class="col-12 col-md-6">
 										<div class="form-group">
@@ -248,7 +248,7 @@
 								<hr>
 							</div>
 							`;}).join("") :
-							`<div class="col-12 mb-2 pb-2">
+							`<div class="col-12 mb-2 pb-2 repeat-el">
 								<div class="row">
 									<div class="col-12 col-md-6">
 										<div class="form-group">
@@ -339,7 +339,7 @@
 							</div>
 							`;
 						%>
-						<div class="col-12 repeat before">
+						<div class="col-12 repeat">
 							<a
 								class="btn btn-primary"
 								data-toggle="tooltip"

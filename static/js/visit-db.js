@@ -39,19 +39,17 @@
 	function onRepeatClick(e) {
 		var $this = $(e.currentTarget);
 
-		var $before = $this.closest(".before");
+		var $insert = $this.closest(".repeatable").find(".insert");
 
-		var $template = $this
-			.closest(".repeatable")
-			.children()
-			.first()
-			.clone();
+		var $template = $(
+			$this.closest(".repeatable").find(".repeat-el")[0]
+		).clone();
 		$template.find("input").val("");
 		$template.find("textarea").val("");
 		$template.find(".awesomplete-label[readonly]").remove();
 		$template.find(".awesomplete-label").show();
 		$template.find(".listening").removeClass("listening");
-		$template.insertBefore($before);
+		$template.appendTo($insert);
 
 		installListeners();
 	}
