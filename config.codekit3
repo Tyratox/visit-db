@@ -7,7 +7,7 @@
 		"uuidString": "6A5C06BE-DB99-499C-9977-C24C447E32F2"
 		}
 	],
-"creatorBuild": "26097",
+"creatorBuild": "26148",
 "files": {
 	"\/.eslintrc.json": {
 		"ft": 524288,
@@ -29,6 +29,13 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/.gitignore",
+		"oF": 0
+		},
+	"\/.ip": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/.ip",
 		"oF": 0
 		},
 	"\/bower.json": {
@@ -10070,6 +10077,64 @@
 		"sC": 0,
 		"tS": 0
 		},
+	"\/build\/.ip": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/build\/.ip",
+		"oF": 0
+		},
+	"\/build\/compiled.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/build\/min\/compiled.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
+	"\/build\/compiled.js.map": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/build\/compiled.js.map",
+		"oF": 0
+		},
+	"\/build\/db.sqlite3": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/build\/db.sqlite3",
+		"oF": 0
+		},
+	"\/build\/logs": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "\/build\/build\/logs",
+		"oF": 0
+		},
+	"\/build\/macos\/node_sqlite3.node": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/build\/macos\/node_sqlite3.node",
+		"oF": 0
+		},
+	"\/build\/macos\/visit-db-macos": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/build\/macos\/visit-db-macos",
+		"oF": 0
+		},
+	"\/build\/macos\/xdg-open": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/build\/macos\/xdg-open",
+		"oF": 0
+		},
 	"\/build\/visit-db-linux": {
 		"cB": 0,
 		"ft": 8192,
@@ -10089,6 +10154,27 @@
 		"ft": 8192,
 		"oA": 2,
 		"oAP": "\/build\/visit-db-win.exe",
+		"oF": 0
+		},
+	"\/build\/windows\/node_sqlite3.node": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/build\/windows\/node_sqlite3.node",
+		"oF": 0
+		},
+	"\/build\/windows\/visit-db-win.exe": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/build\/windows\/visit-db-win.exe",
+		"oF": 0
+		},
+	"\/build\/windows\/xdg-open": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/build\/windows\/xdg-open",
 		"oF": 0
 		},
 	"\/database\/indicies.sqlite3.sql": {
@@ -10201,6 +10287,14 @@
 		"oAP": "\/build\/node_modules",
 		"oF": 0
 		},
+	"\/package-lock.json": {
+		"ft": 524288,
+		"oA": 1,
+		"oAP": "\/package-lock-min.json",
+		"oF": 0,
+		"oO": 0,
+		"oS": 1
+		},
 	"\/package.json": {
 		"ft": 524288,
 		"oA": 1,
@@ -10226,6 +10320,33 @@
 		"pME": 1,
 		"rFN": 0,
 		"uCM": 0
+		},
+	"\/src\/compiled.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/min\/compiled.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
+	"\/src\/compiled.js.map": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/src\/compiled.js.map",
+		"oF": 0
+		},
+	"\/src\/dateutils.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/min\/dateutils.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
 		},
 	"\/src\/db.js": {
 		"ft": 64,
@@ -10267,6 +10388,16 @@
 		"sC": 0,
 		"tS": 0
 		},
+	"\/src\/ips.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/min\/ips.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
 	"\/src\/logger.js": {
 		"ft": 64,
 		"ma": 1,
@@ -10283,6 +10414,16 @@
 		"mi": 1,
 		"oA": 1,
 		"oAP": "\/src\/routes\/delete\/min\/patient.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
+	"\/src\/routes\/delete\/reset.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/routes\/delete\/min\/reset.min.js",
 		"oF": 0,
 		"sC": 0,
 		"tS": 0
@@ -10327,6 +10468,26 @@
 		"sC": 0,
 		"tS": 0
 		},
+	"\/src\/routes\/insert\/generic-table.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/routes\/insert\/min\/generic-table.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
+	"\/src\/routes\/overview.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/src\/routes\/min\/overview.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
+		},
 	"\/src\/routes\/visit.js": {
 		"ft": 64,
 		"ma": 1,
@@ -10360,48 +10521,6 @@
 		"oS": 3,
 		"uL": 1
 		},
-	"\/src\/templates\/footer.ejs": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/src\/templates\/footer.ejs",
-		"oF": 0
-		},
-	"\/src\/templates\/header.ejs": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/src\/templates\/header.ejs",
-		"oF": 0
-		},
-	"\/src\/templates\/pages\/index.ejs": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/src\/templates\/pages\/index.ejs",
-		"oF": 0
-		},
-	"\/src\/templates\/pages\/patient.ejs": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/src\/templates\/pages\/patient.ejs",
-		"oF": 0
-		},
-	"\/src\/templates\/pages\/visit.ejs": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/src\/templates\/pages\/visit.ejs",
-		"oF": 0
-		},
-	"\/src\/templates\/pages\/visits.ejs": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/src\/templates\/pages\/visits.ejs",
-		"oF": 0
-		},
 	"\/static\/css\/styles.min.css": {
 		"aP": 1,
 		"bl": 0,
@@ -10428,6 +10547,62 @@
 		"oF": 0,
 		"sC": 0,
 		"tS": 0
+		},
+	"\/templates\/footer.ejs": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/templates\/footer.ejs",
+		"oF": 0
+		},
+	"\/templates\/header.ejs": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/templates\/header.ejs",
+		"oF": 0
+		},
+	"\/templates\/pages\/generic-table.ejs": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/templates\/pages\/generic-table.ejs",
+		"oF": 0
+		},
+	"\/templates\/pages\/index.ejs": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/templates\/pages\/index.ejs",
+		"oF": 0
+		},
+	"\/templates\/pages\/overview.ejs": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/templates\/pages\/overview.ejs",
+		"oF": 0
+		},
+	"\/templates\/pages\/patient.ejs": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/templates\/pages\/patient.ejs",
+		"oF": 0
+		},
+	"\/templates\/pages\/visit.ejs": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/templates\/pages\/visit.ejs",
+		"oF": 0
+		},
+	"\/templates\/pages\/visits.ejs": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/templates\/pages\/visits.ejs",
+		"oF": 0
 		},
 	"\/tools\/mysql2sqlite\/LICENSE": {
 		"cB": 0,
@@ -10460,6 +10635,16 @@
 		"pME": 1,
 		"rFN": 0,
 		"uCM": 0
+		},
+	"\/webpack.config.js": {
+		"ft": 64,
+		"ma": 1,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/min\/webpack.config.min.js",
+		"oF": 0,
+		"sC": 0,
+		"tS": 0
 		},
 	"\/yarn.lock": {
 		"cB": 0,

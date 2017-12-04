@@ -9,7 +9,7 @@
 		<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js" async></script>
 		<script src="/bower_components/parsleyjs/dist/parsley.min.js"></script>
 		<script src="/bower_components/parsleyjs/dist/i18n/de.js" async></script>
-		<script src="/bower_components/parsleyjs/dist/i18n/de.extra.js"async></script>
+		<script src="/bower_components/parsleyjs/dist/i18n/de.extra.js" async></script>
 		<script src="/bower_components/awesomplete/awesomplete.js"></script>
 		<script src="/static/js/visit-db.js" async></script>
 	</head>
@@ -34,7 +34,7 @@
 							<li class="nav-item">
 								<a class="nav-link" href="/overview">Übersicht</a>
 							</li>
-							 <li class="nav-item dropdown">
+							<li class="nav-item dropdown">
 								<a class="nav-link dropdown-toggle" href="#" id="export-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									Exportieren
 								</a>
@@ -44,8 +44,27 @@
 									<a class="dropdown-item" href="/export/?visit_type_id=1">Visitenbegleitung</a>
 									<a class="dropdown-item" href="/export/?visit_type_id=2">Kardexvisite</a>
 									<a class="dropdown-item" href="/export/?visit_type_id=4">Kurvenscreening</a>
+								</div>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="export-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Erweitert
+								</a>
+								<div class="dropdown-menu" aria-labelledby="export-dropdown">
+									<a class="dropdown-item" href="/edit/table/hospitals">Spitäler bearbeiten</a>
+									<a class="dropdown-item" href="/edit/table/substances">ATC Tabelle bearbeiten</a>
+									<a class="dropdown-item" href="/edit/table/disciplines">Disziplinen bearbeiten</a>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="/export-substitutions/">Substitution</a>
+									<a class="dropdown-item" href="/edit/table/case_types">Falltypen bearbeiten</a>
+									<div class="dropdown-divider"></div>
+									<a class="dropdown-item" href="/edit/table/visit_types">Visitentypen bearbeiten</a>
+									<div class="dropdown-divider"></div>
+									<a class="dropdown-item" href="/edit/table/intervention_problems">Interventionsprobleme bearbeiten</a>
+									<a class="dropdown-item" href="/edit/table/intervention_reasons">Interventionsgründe bearbeiten</a>
+									<a class="dropdown-item" href="/edit/table/intervention_results">Interventionsresultate bearbeiten</a>
+									<a class="dropdown-item" href="/edit/table/intervention_types">Interventionstypen bearbeiten</a>
+									<div class="dropdown-divider"></div>
+									<a class="dropdown-item text-danger" href="/reset">Zurücksetzen</a>
 								</div>
 							</li>
 						</ul>

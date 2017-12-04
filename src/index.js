@@ -51,7 +51,7 @@ try {
 }
 
 const { setupDbStructure } = require("./dbutils");
-setupDbStructure(__dirname);
+setupDbStructure(process.cwd());
 
 const db = require("./db");
 const { errors: celebrateErrors } = require("celebrate");
@@ -77,7 +77,9 @@ const app = new express();
 app.use(helmet());
 app.use(compression());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+	bodyParser.urlencoded({ extended: true, limit: "10mb", parameterLimit: 10e5 })
+);
 app.use(
 	expressSession({
 		secret: Math.random().toString(),
@@ -102,6 +104,10 @@ const addPatientData = require("./routes/insert/add-patient-data");
 app.get("/add-patient/:visitId", addPatientData.get);
 app.post("/add-patient/:visitId", addPatientData.post);
 
+const table = require("./routes/insert/generic-table");
+app.get("/edit/table/:table", table.get);
+app.post("/edit/table/:table", table.post);
+
 const visits = require("./routes/visits");
 app.get("/visits/:page?", visits.get);
 
@@ -119,6 +125,9 @@ app.get("/export", exportRoute);
 
 const overview = require("./routes/overview");
 app.get("/overview", overview.get);
+
+const reset = require("./routes/delete/reset");
+app.get("/reset", reset);
 
 app.get("/ping", (request, response, next) => response.end("pong"));
 

@@ -39,7 +39,7 @@
 	function onRepeatClick(e) {
 		var $this = $(e.currentTarget);
 
-		var $before = $this.parent();
+		var $before = $this.closest(".before");
 
 		var $template = $this
 			.closest(".repeatable")
@@ -89,6 +89,18 @@
 			.addClass("listening");
 	}
 
+	function onDeleteGenericRow(e) {
+		var $this = $(e.currentTarget);
+		var $row = $this.closest("tr");
+		var $table = $this.closest(".generic-table");
+		var $rows = $table.find("tbody tr:not(.before)");
+		if ($rows.length > 1) {
+			$row.remove();
+		} else {
+			alert("Der letzte Eintrag wird nicht entfernt!");
+		}
+	}
+
 	function installListeners() {
 		$('[data-toggle="tooltip"]').tooltip();
 
@@ -111,6 +123,10 @@
 		$("[data-clickable]")
 			.off("click", onClickableClick)
 			.on("click", onClickableClick);
+
+		$(".generic-table .delete")
+			.off("click", onDeleteGenericRow)
+			.on("click", onDeleteGenericRow);
 	}
 
 	installListeners();
