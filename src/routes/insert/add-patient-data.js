@@ -31,15 +31,13 @@ module.exports.get = [
 		}
 	}),
 	async (request, response) => {
-		response.header("Content-Type", "text/html");
-
 		const { visitId } = request.params;
 		const { patient_id: patientId } = request.query;
 
 		const substances = await loadAll(
-				db,
-				"SELECT id, atc_code, name FROM substances"
-			),
+			db,
+			"SELECT id, atc_code, name FROM substances"
+		),
 			caseTypes = await loadAll(
 				db,
 				"SELECT id, abbreviation, name FROM case_types"
@@ -90,7 +88,8 @@ module.exports.get = [
 				patients.patient_number,
 				patients.gender,
 				patients.date_of_birth,
-				patients.visit_id
+				patients.visit_id,
+				patients.comment
 				FROM patients
 				LEFT JOIN cases ON patients.case_id=cases.id
 				WHERE patients.id = ?`,
@@ -103,6 +102,7 @@ module.exports.get = [
 				drug,
 				problem,
 				suggestion,
+				comment,
 				substance_id,
 				intervention_problem_id,
 				intervention_reason_id,
@@ -136,7 +136,7 @@ module.exports.post = [
 			case_number: Joi.string().required(),
 			date_of_birth: Joi.string()
 				.regex(
-					/(^(((0[1-9]|1[0-9]|2[0-8])[\.](0[1-9]|1[012]))|((29|30|31)[\.](0[13578]|1[02]))|((29|30)[\..](0[4,6,9]|11)))[\.](19|[2-9][0-9])\d\d$)|(^29[\.]02[\.](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$)/
+				/(^(((0[1-9]|1[0-9]|2[0-8])[\.](0[1-9]|1[012]))|((29|30|31)[\.](0[13578]|1[02]))|((29|30)[\..](0[4,6,9]|11)))[\.](19|[2-9][0-9])\d\d$)|(^29[\.]02[\.](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$)/
 				)
 				.required(),
 			case_type: Joi.number()
@@ -146,19 +146,24 @@ module.exports.post = [
 			gender: Joi.string()
 				.valid("male", "female")
 				.required(),
+			comment: Joi.string().max(1024).allow(""),
 			intervention_drug: Joi.array().items(
 				Joi.string()
-					.max(100)
+					.max(1024)
 					.allow("")
 			),
 			intervention_problem: Joi.array().items(
 				Joi.string()
-					.max(100)
+					.max(1024)
+					.allow("")
+			), intervention_comment: Joi.array().items(
+				Joi.string()
+					.max(1024)
 					.allow("")
 			),
 			intervention_suggestion: Joi.array().items(
 				Joi.string()
-					.max(100)
+					.max(1024)
 					.allow("")
 			),
 			intervention_substance_id: Joi.array().items(Joi.number().positive()),
@@ -183,14 +188,15 @@ module.exports.post = [
 			case_type,
 			patient_number,
 			gender,
-			substance
+			substance,
+			comment
 		} = request.body;
 
 		const { patient_id: idToUpdate } = request.query;
 
 		const intervention_drug = request.body.intervention_drug
-				? request.body.intervention_drug
-				: [],
+			? request.body.intervention_drug
+			: [],
 			intervention_problem = request.body.intervention_problem
 				? request.body.intervention_problem
 				: [],
@@ -211,6 +217,9 @@ module.exports.post = [
 				: [],
 			intervention_type_id = request.body.intervention_type_id
 				? request.body.intervention_type_id
+				: [],
+			intervention_comment = request.body.intervention_comment
+				? request.body.intervention_comment
 				: [];
 
 		if (
@@ -272,19 +281,21 @@ module.exports.post = [
 				SET case_id = ?,
 				patient_number = ?,
 				gender = ?,
-				date_of_birth = ?
+				date_of_birth = ?,
+				comment = ?
 			`,
-				[caseId, patient_number, gender, stringToUnixTimestamp(date_of_birth)]
+				[caseId, patient_number, gender, stringToUnixTimestamp(date_of_birth), comment]
 			);
 		} else {
 			patientId = await insert(
 				db,
-				"INSERT INTO patients(case_id, patient_number, gender, date_of_birth, visit_id) VALUES(?, ?, ?, ?, ?)",
+				"INSERT INTO patients(case_id, patient_number, gender, date_of_birth, comment, visit_id) VALUES(?, ?, ?, ?, ?, ?)",
 				[
 					caseId,
 					patient_number,
 					gender,
 					stringToUnixTimestamp(date_of_birth),
+					comment,
 					visitId
 				]
 			);
@@ -304,17 +315,19 @@ module.exports.post = [
 								drug,
 								problem,
 								suggestion,
+								comment,
 								patient_id,
 								substance_id,
 								intervention_problem_id,
 								intervention_reason_id,
 								intervention_type_id,
 								intervention_result_id
-							) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+							) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 								[
 									drug,
 									intervention_problem[index],
 									intervention_suggestion[index],
+									intervention_comment[index],
 									patientId,
 									intervention_substance_id[index]
 										? intervention_substance_id[index]

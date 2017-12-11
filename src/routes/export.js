@@ -104,39 +104,41 @@ module.exports = [
 			);
 		});
 
+		const date = new Date();
+
 		response.setHeader("Content-type", "application/octet-stream");
 		response.setHeader(
 			"Content-Disposition",
-			"attachment; filename=export.csv"
+			"attachment; filename=" + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + "_" + "klinpharmdb.csv"
 		);
 		response.send(
 			'"' +
-				[
-					"Datum",
-					"Pharm.",
-					"Spital (Abkürzung)",
-					"Spital",
-					"Disziplin",
-					"Station",
-					"Patientennummer",
-					"Geburtsdatum",
-					"Geschlecht",
-					"Fallnummer",
-					"Falltyp (Abkürzung)",
-					"Falltyp",
-					"Wirkstoff",
-					"ATC",
-					"Betroffenes Medikament",
-					"Problem",
-					"Vorschlag",
-					"Erfasstes Problem",
-					"Grund der Interventiom",
-					"Intervention",
-					"Resultat der Intervention"
-				].join('","') +
-				'"' +
-				"\n" +
-				rows.join("\n")
+			[
+				"Datum",
+				"Pharm.",
+				"Spital (Abkürzung)",
+				"Spital",
+				"Disziplin",
+				"Station",
+				"Patientennummer",
+				"Geburtsdatum",
+				"Geschlecht",
+				"Fallnummer",
+				"Falltyp (Abkürzung)",
+				"Falltyp",
+				"Wirkstoff",
+				"ATC",
+				"Betroffenes Medikament",
+				"Problem",
+				"Vorschlag",
+				"Erfasstes Problem",
+				"Grund der Interventiom",
+				"Intervention",
+				"Resultat der Intervention"
+			].join('","') +
+			'"' +
+			"\n" +
+			rows.join("\n")
 		);
 	}
 ];

@@ -61,7 +61,8 @@
 						case_number,
 						case_type_abbreviation,
 						case_type_name,
-						interventions
+						interventions,
+						comment
 					}) => {
 						return `
 							<div class="col-12 col-md-6">
@@ -90,6 +91,10 @@
 											<td>${patient_number ? patient_number : "-"}</td>
 										</tr>
 										<tr>
+											<td>Kommentar</td>
+											<td>${comment ? comment : "-"}</td>
+										</tr>
+										<tr>
 											<td>Aktionen</td>
 											<td>
 												<div class="pb-2">
@@ -113,7 +118,8 @@
 									problem_class,
 									reason_class,
 									type_class,
-									result_class
+									result_class,
+									comment
 								}) => {
 									return `
 											<div class="table-responsive">
@@ -149,6 +155,10 @@
 													<tr>
 														<td>Resultat der Intervention</td>
 														<td>${result_class ? result_class : "-"}</td>
+													</tr>
+													<tr>
+														<td>Kommentar</td>
+														<td>${comment ? comment : "-"}</td>
 													</tr>
 												</table>
 											</div>

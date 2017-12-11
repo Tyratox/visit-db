@@ -32,7 +32,7 @@
 								<option <%- locals.visitType ? '' : 'selected' %>>Wähle einen Visitentyp</option>
 								<%- visitTypes.map(({id, name}, index) => {
 									return `<option ${
-										(locals.visitType ? (id === visitType) : (index === 0)) ? "selected" : ""
+										(locals.visitType ? (id === visitType) : false) ? "selected" : ""
 										} value=${id}>${name}</option>`;
 								}).join("") %>
 							</select>

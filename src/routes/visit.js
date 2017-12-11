@@ -26,8 +26,6 @@ module.exports.get = [
 		}
 	}),
 	async (request, response) => {
-		response.header("Content-Type", "text/html");
-
 		const { visitId } = request.params;
 
 		let visit = await get(
@@ -63,6 +61,7 @@ module.exports.get = [
 				patients.patient_number,
 				patients.date_of_birth,
 				patients.gender,
+				patients.comment,
 				cases.case_number,
 				case_types.abbreviation as case_type_abbreviation,
 				case_types.name as case_type_name,
@@ -81,6 +80,7 @@ module.exports.get = [
 					drug,
 					problem,
 					suggestion,
+					comment,
 					substances.name as substance_name,
 					substances.atc_code as substance_atc_code,
 					intervention_problems.name as problem_class,

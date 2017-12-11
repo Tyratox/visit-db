@@ -20,8 +20,6 @@ const template = prepareTemplate(
 );
 
 module.exports.get = async (request, response) => {
-	response.header("Content-Type", "text/html");
-
 	const visitsPerPerson = (await loadAll(
 		db,
 		`SELECT

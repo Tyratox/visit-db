@@ -54,8 +54,6 @@ module.exports.get = [
 		}
 	}),
 	async (request, response) => {
-		response.header("Content-Type", "text/html");
-
 		const page = request.params.page ? request.params.page : 1;
 		const filter = request.query.filter ? request.query.filter : {};
 

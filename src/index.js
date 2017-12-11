@@ -38,7 +38,7 @@ try {
 				logger.log("info", "waiting 2000ms to quit..");
 				let waitTill = new Date(new Date().getTime() + 2000);
 
-				while (waitTill > new Date()) {}
+				while (waitTill > new Date()) { }
 				process.exit();
 			}
 		} catch (err) {
@@ -96,6 +96,11 @@ app.use(
 	express.static(path.resolve(__dirname, "../bower_components"))
 );
 
+app.use((request, response, next) => {
+	response.header("Content-Type", "text/html");
+	next();
+});
+
 const createVisit = require("./routes/insert/create-visit");
 app.get("/", createVisit.get);
 app.post("/", createVisit.post);
@@ -134,6 +139,7 @@ app.get("/ping", (request, response, next) => response.end("pong"));
 app.use(celebrateErrors());
 app.use((error, request, response, next) => {
 	response.header("Content-Type", "text/html");
+
 	response.write("<h1>Fehler!</h1>");
 	response.write("<code>" + error.toString() + "</code>");
 	response.end();

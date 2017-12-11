@@ -42,8 +42,6 @@ module.exports.get = [
 		}
 	}),
 	async (request, response) => {
-		response.header("Content-Type", "text/html");
-
 		const { table } = request.params;
 
 		if (tables.indexOf(table) === -1) {
