@@ -96,6 +96,9 @@ app.use(
 	express.static(path.resolve(__dirname, "../bower_components"))
 );
 
+const exportRoute = require("./routes/export");
+app.get("/export", exportRoute);
+
 app.use((request, response, next) => {
 	response.header("Content-Type", "text/html");
 	next();
@@ -124,9 +127,6 @@ app.get("/delete/visit/:visitId", deleteVisit);
 
 const deletePatient = require("./routes/delete/patient");
 app.get("/delete/patient/:patientId", deletePatient);
-
-const exportRoute = require("./routes/export");
-app.get("/export", exportRoute);
 
 const overview = require("./routes/overview");
 app.get("/overview", overview.get);

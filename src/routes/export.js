@@ -106,13 +106,14 @@ module.exports = [
 
 		const date = new Date();
 
-		response.setHeader("Content-type", "application/octet-stream");
+		response.setHeader("Content-Encoding", "UTF-8");
+		response.setHeader("Content-type", "text/csv; charset=UTF-8");
 		response.setHeader(
 			"Content-Disposition",
 			"attachment; filename=" + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + "_" + "klinpharmdb.csv"
 		);
 		response.send(
-			'"' +
+			'\ufeff"' +
 			[
 				"Datum",
 				"Pharm.",
@@ -132,7 +133,7 @@ module.exports = [
 				"Problem",
 				"Vorschlag",
 				"Erfasstes Problem",
-				"Grund der Interventiom",
+				"Grund der Intervention",
 				"Intervention",
 				"Resultat der Intervention"
 			].join('","') +
