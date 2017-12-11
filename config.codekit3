@@ -10114,6 +10114,33 @@
 		"oAP": "\/build\/build\/logs",
 		"oF": 0
 		},
+	"\/build\/macos\/.ip": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/build\/macos\/.ip",
+		"oF": 0
+		},
+	"\/build\/macos\/db.sqlite3": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/build\/macos\/db.sqlite3",
+		"oF": 0
+		},
+	"\/build\/macos\/logs": {
+		"ft": 65536,
+		"oA": 1,
+		"oAP": "\/build\/build\/macos\/logs",
+		"oF": 0
+		},
+	"\/build\/macos\/macos-x64.zip": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/build\/macos\/macos-x64.zip",
+		"oF": 0
+		},
 	"\/build\/macos\/node_sqlite3.node": {
 		"cB": 0,
 		"ft": 8192,
@@ -10128,53 +10155,46 @@
 		"oAP": "\/build\/macos\/visit-db-macos",
 		"oF": 0
 		},
-	"\/build\/macos\/xdg-open": {
+	"\/build\/windows-x64\/node_sqlite3.node": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
-		"oAP": "\/build\/macos\/xdg-open",
+		"oAP": "\/build\/windows-x64\/node_sqlite3.node",
 		"oF": 0
 		},
-	"\/build\/visit-db-linux": {
+	"\/build\/windows-x64\/visit-db-win.exe": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
-		"oAP": "\/build\/visit-db-linux",
+		"oAP": "\/build\/windows-x64\/visit-db-win.exe",
 		"oF": 0
 		},
-	"\/build\/visit-db-macos": {
+	"\/build\/windows-x64\/windows-x64.zip": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
-		"oAP": "\/build\/visit-db-macos",
+		"oAP": "\/build\/windows-x64\/windows-x64.zip",
 		"oF": 0
 		},
-	"\/build\/visit-db-win.exe": {
+	"\/build\/windows-x86\/node_sqlite3.node": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
-		"oAP": "\/build\/visit-db-win.exe",
+		"oAP": "\/build\/windows-x86\/node_sqlite3.node",
 		"oF": 0
 		},
-	"\/build\/windows\/node_sqlite3.node": {
+	"\/build\/windows-x86\/visit-db.exe": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
-		"oAP": "\/build\/windows\/node_sqlite3.node",
+		"oAP": "\/build\/windows-x86\/visit-db.exe",
 		"oF": 0
 		},
-	"\/build\/windows\/visit-db-win.exe": {
+	"\/build\/windows-x86\/windows-x86.zip": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 2,
-		"oAP": "\/build\/windows\/visit-db-win.exe",
-		"oF": 0
-		},
-	"\/build\/windows\/xdg-open": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 2,
-		"oAP": "\/build\/windows\/xdg-open",
+		"oAP": "\/build\/windows-x86\/windows-x86.zip",
 		"oF": 0
 		},
 	"\/database\/indicies.sqlite3.sql": {

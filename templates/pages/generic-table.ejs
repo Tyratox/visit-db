@@ -7,6 +7,7 @@
 			Fehler bei der Eingabe können Unvorhergesehenes bewirken!
 		</p>
 		<form method="POST">
+			<% if(rows.length < 100){ %>
 			<div class="table-responsive">
 				<table class="table table-striped table-bordered generic-table repeatable">
 					<thead>
@@ -55,6 +56,14 @@
 				</table>
 			</div>
 			<input class="btn btn-primary mt-1" type="submit" value="Speichern">
+			<% }else{ %>
+
+			<p class="bg-danger text-white p-2">
+				Diese Tabelle enthält zu viele Einträge um sie hier (gut) bearbeiten zu können.
+				Bitte verwenden Sie die Verknüpfung "Datenbank bearbeiten" und öffnen Sie die Datei "bin/db.sqlite3".
+			</p>
+
+			<% } %>
 		</form>
 	</div>
 <%- include('../footer') -%>
