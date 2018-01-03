@@ -97,9 +97,9 @@ module.exports = [
 					row.suggestion,
 					row.problem_category,
 					row.reason_category,
-					row.result_category,
-					row.type_category
-				].join('","') +
+					row.type_category,
+					row.result_category
+				].join('","').replace(/\t|\v|\n|\r/g, "") +
 				'"'
 			);
 		});

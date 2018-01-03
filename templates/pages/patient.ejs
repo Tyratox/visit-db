@@ -1,4 +1,4 @@
-<%- include('../header') -%>
+﻿<%- include('../header') -%>
 	<div class="container">
 		<h2>
 			Patientendaten erfassen
@@ -77,9 +77,9 @@
 											type="radio"
 											name="gender"
 											value="male"
+											required
 											<%-
-												(locals.gender && gender === "male") ||
-												(!locals.gender) ? "checked" : ""
+												(locals.gender && gender === "male") ? "checked" : ""
 											%>
 										>
 										Männlich
@@ -92,6 +92,7 @@
 											type="radio"
 											name="gender"
 											value="female"
+											required
 											<%-
 												locals.gender && gender === "female" ? "checked" : ""
 											%>
@@ -127,6 +128,7 @@
 									name="comment"
 									placeholder=""
 									rows="5"
+									maxlength="2048"
 								><%= locals.comment ? comment : '' %></textarea>
 							</div>
 						</div>
@@ -184,7 +186,6 @@
 												name="intervention_drug[]"
 												value="${drug}"
 												placeholder="Gib hier den Namen des betroffenen Medikamentes ein"
-												required
 											>
 										</div>
 										<div class="form-group">
@@ -194,6 +195,7 @@
 												class="form-control"
 												name="intervention_problem[]"
 												rows="5"
+												maxlength="2048"
 												placeholder="Beschreibe hier das Problem"
 											>${problem}</textarea>
 										</div>
@@ -204,6 +206,7 @@
 												class="form-control"
 												name="intervention_suggestion[]"
 												rows="5"
+												maxlength="2048"
 												placeholder="Gib hier einen Lösungsvorschlag ein"
 											>${suggestion}</textarea>
 										</div>
@@ -264,8 +267,12 @@
 												name="intervention_comment[]"
 												placeholder=""
 												rows="5"
+												maxlength="2048"
 											>${comment}</textarea>
 										</div>
+									</div>
+									<div class="col-12">
+										<button class="btn btn-danger remove-el">Entferne Intervention</button>
 									</div>
 								</div>
 								<hr>
@@ -295,7 +302,6 @@
 												class="form-control"
 												name="intervention_drug[]"
 												placeholder="Gib hier den Namen des betroffenen Medikamentes ein"
-												required
 											>
 										</div>
 										<div class="form-group">
@@ -305,6 +311,7 @@
 												class="form-control"
 												name="intervention_problem[]"
 												rows="5"
+												maxlength="2048"
 												placeholder="Beschreibe hier das Problem"
 											></textarea>
 										</div>
@@ -315,6 +322,7 @@
 												class="form-control"
 												name="intervention_suggestion[]"
 												rows="5"
+												maxlength="2048"
 												placeholder="Gib hier einen Lösungsvorschlag ein"
 											></textarea>
 										</div>
@@ -363,20 +371,26 @@
 												name="intervention_comment[]"
 												placeholder=""
 												rows="5"
+												maxlength="2048"
 											></textarea>
 										</div>
+									</div>
+									<div class="col-12">
+										<button class="btn btn-danger remove-el">Entferne Intervention</button>
 									</div>
 								</div>
 								<hr>
 							</div>
 							`;
 						%>
+					</div>
+					<div class="row">
 						<div class="col-12 repeat">
 							<a
 								class="btn btn-primary"
 								data-toggle="tooltip"
 								data-placement="bottom"
-								title="Weiteres Feld hinzufügen"
+								title="Weitere Intervention hinzufügen"
 							>
 								+
 							</a>

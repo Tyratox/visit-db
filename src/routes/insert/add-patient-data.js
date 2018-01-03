@@ -146,24 +146,24 @@ module.exports.post = [
 			gender: Joi.string()
 				.valid("male", "female")
 				.required(),
-			comment: Joi.string().max(1024).allow(""),
+			comment: Joi.string().max(2048).allow(""),
 			intervention_drug: Joi.array().items(
 				Joi.string()
-					.max(1024)
+					.max(2048)
 					.allow("")
 			),
 			intervention_problem: Joi.array().items(
 				Joi.string()
-					.max(1024)
+					.max(2048)
 					.allow("")
 			), intervention_comment: Joi.array().items(
 				Joi.string()
-					.max(1024)
+					.max(2048)
 					.allow("")
 			),
 			intervention_suggestion: Joi.array().items(
 				Joi.string()
-					.max(1024)
+					.max(2048)
 					.allow("")
 			),
 			intervention_substance_id: Joi.array().items(Joi.number().positive()),
@@ -283,8 +283,10 @@ module.exports.post = [
 				gender = ?,
 				date_of_birth = ?,
 				comment = ?
+				WHERE
+				id = ?
 			`,
-				[caseId, patient_number, gender, stringToUnixTimestamp(date_of_birth), comment]
+				[caseId, patient_number, gender, stringToUnixTimestamp(date_of_birth), comment, patientId]
 			);
 		} else {
 			patientId = await insert(
@@ -345,7 +347,7 @@ module.exports.post = [
 				});
 			})
 			.then(() => {
-				response.redirect("/visit/" + visitId);
+				response.redirect("/visit/" + visitId + "#patient-id-" + patientId);
 			});
 	}
 ];

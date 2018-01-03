@@ -95,7 +95,22 @@
 		if ($rows.length > 1) {
 			$row.remove();
 		} else {
-			alert("Der letzte Eintrag wird nicht entfernt!");
+			alert("Der letzte Eintrag kann nicht entfernt werden!");
+		}
+	}
+	
+	function onRemoveElClick(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		
+		var $this = $(e.currentTarget);
+		var $repeatable = $this.closest(".repeatable");
+		var $elements = $repeatable.find(".repeat-el");
+
+		if ($elements.length > 1) {
+			$this.closest(".repeat-el").remove();
+		} else {
+			alert("Der letzte Eintrag kann nicht entfernt werden!");
 		}
 	}
 
@@ -125,6 +140,9 @@
 		$(".generic-table .delete")
 			.off("click", onDeleteGenericRow)
 			.on("click", onDeleteGenericRow);
+		$(".repeatable .remove-el")
+			.off("click", onRemoveElClick)
+			.on("click", onRemoveElClick);
 	}
 
 	installListeners();
