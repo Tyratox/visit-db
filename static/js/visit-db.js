@@ -1,4 +1,4 @@
-(function($) {
+$(function() {
 	function onSelect(e) {
 		var el = e.currentTarget;
 		var rnd = Math.random()
@@ -146,4 +146,4 @@
 	}
 
 	installListeners();
-})(jQuery);
+});
