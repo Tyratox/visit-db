@@ -136,7 +136,7 @@ module.exports.post = [
 			case_number: Joi.string().required(),
 			date_of_birth: Joi.string()
 				.regex(
-				/(^(((0[1-9]|1[0-9]|2[0-8])[\.](0[1-9]|1[012]))|((29|30|31)[\.](0[13578]|1[02]))|((29|30)[\..](0[4,6,9]|11)))[\.](19|[2-9][0-9])\d\d$)|(^29[\.]02[\.](19|[2-9][0-9])(00|04|08|12|16|20|24|28|32|36|40|44|48|52|56|60|64|68|72|76|80|84|88|92|96)$)/
+					/[0-9]{1,2}\.[0-9]{1,2}\.([0-9]{4}|[0-9]{2})/
 				)
 				.required(),
 			case_type: Joi.number()
@@ -303,7 +303,7 @@ module.exports.post = [
 			);
 		}
 
-		update(db, "UPDATE cases SET case_type_id = ?", [case_type])
+		update(db, "UPDATE cases SET case_type_id = ? WHERE id = ?", [case_type, caseId])
 			.then(() => {
 				return remove(db, "DELETE FROM interventions WHERE patient_id = ?", [
 					patientId

@@ -31,16 +31,17 @@ module.exports.get = async (request, response) => {
 		SUM(CASE WHEN visits.visit_type_id=1 THEN 1 ELSE 0 END) as count_type_1,
 		SUM(CASE WHEN visits.visit_type_id=2 THEN 1 ELSE 0 END) as count_type_2,
 		SUM(CASE WHEN visits.visit_type_id=3 THEN 1 ELSE 0 END) as count_type_3,
-		patients.correction_count
+		SUM(interventions.correction_count) as correction_count
 		FROM visits
 		LEFT JOIN users ON visits.user_id=users.id
 		LEFT JOIN(
 			SELECT
 			patients.visit_id as visit_id,
 			COUNT(*) as correction_count
-			FROM patients
+			FROM interventions
+			LEFT JOIN patients ON interventions.patient_id=patients.id
 			GROUP BY patients.visit_id
-		) as patients ON visits.id=patients.visit_id
+		) as interventions ON visits.id=interventions.visit_id
 		GROUP BY visits.user_id
 		ORDER BY duration ASC
 		`
@@ -60,16 +61,17 @@ module.exports.get = async (request, response) => {
 		SUM(CASE WHEN visits.visit_type_id=1 THEN 1 ELSE 0 END) as count_type_1,
 		SUM(CASE WHEN visits.visit_type_id=2 THEN 1 ELSE 0 END) as count_type_2,
 		SUM(CASE WHEN visits.visit_type_id=3 THEN 1 ELSE 0 END) as count_type_3,
-		patients.correction_count
+		SUM(interventions.correction_count) as correction_count
 		FROM visits
 		LEFT JOIN hospitals ON visits.hospital_id=hospitals.id
 		LEFT JOIN(
 			SELECT
 			patients.visit_id as visit_id,
 			COUNT(*) as correction_count
-			FROM patients
+			FROM interventions
+			LEFT JOIN patients ON interventions.patient_id=patients.id
 			GROUP BY patients.visit_id
-		) as patients ON visits.id=patients.visit_id
+		) as interventions ON visits.id=interventions.visit_id
 		GROUP BY visits.hospital_id
 		ORDER BY correction_count DESC
 		`
@@ -89,7 +91,7 @@ module.exports.get = async (request, response) => {
 		SUM(CASE WHEN visits.visit_type_id=1 THEN 1 ELSE 0 END) as count_type_1,
 		SUM(CASE WHEN visits.visit_type_id=2 THEN 1 ELSE 0 END) as count_type_2,
 		SUM(CASE WHEN visits.visit_type_id=3 THEN 1 ELSE 0 END) as count_type_3,
-		patients.correction_count
+		SUM(interventions.correction_count) as correction_count
 		FROM visits
 		LEFT JOIN stations ON visits.station_id=stations.id
 		LEFT JOIN hospitals ON visits.hospital_id=hospitals.id
@@ -97,9 +99,10 @@ module.exports.get = async (request, response) => {
 			SELECT
 			patients.visit_id as visit_id,
 			COUNT(*) as correction_count
-			FROM patients
+			FROM interventions
+			LEFT JOIN patients ON interventions.patient_id=patients.id
 			GROUP BY patients.visit_id
-		) as patients ON visits.id=patients.visit_id
+		) as interventions ON visits.id=interventions.visit_id
 		GROUP BY visits.station_id
 		ORDER BY correction_count DESC
 		`

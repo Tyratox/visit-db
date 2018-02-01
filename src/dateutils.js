@@ -26,10 +26,12 @@ const dateToUnixTimestamp = date => {
 module.exports.dateToUnixTimestamp = dateToUnixTimestamp;
 
 const stringToDate = string => {
+	const parts = string.split(".");
+	const d = new Date(), f = d.getFullYear().toString(), f1 = f.substr(0,2), f2 = f.substr(2);
 	return new Date(
-		string.substring(6),
-		parseInt(string.substring(3, 5)) - 1,
-		string.substring(0, 2)
+		parts[2].length === 2 ? (parseInt(parts[2]) <= parseInt(f2) ? f1 : parseInt(f1) - 1) + parts[2] : parts[2],
+		parseInt(parts[1]) - 1,
+		parts[0]
 	);
 };
 module.exports.stringToDate = stringToDate;
@@ -45,15 +47,11 @@ const formatMinutes = minutes => {
 		mins = minutes % 60;
 
 	if (minutes < 60) {
-	} else if (minutes < 60 * 24) {
+	} else{
 		hours = Math.floor(minutes / 60);
-	} else {
-		days = Math.floor(minutes / 24 / 60);
-		hours = Math.floor((minutes % (24 * 60)) / 60);
 	}
 
 	return (
-		(days ? days + " Tag" + (days > 1 ? "e" : "") + " " : "") +
 		(hours ? hours + " Stunde" + (hours > 1 ? "n" : "") + " " : "") +
 		(mins ? mins + " Minute" + (mins > 1 ? "n" : "") : "")
 	);

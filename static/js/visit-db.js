@@ -24,6 +24,8 @@ $(function() {
 				.show()
 				.focus();
 		});
+		
+		$readonly.closest(".form-group").next(".form-group").find("input").focus();
 	}
 
 	function onPlaceholderClick(e) {
@@ -47,6 +49,7 @@ $(function() {
 		$template.find("input").val("");
 		$template.find("textarea").val("");
 		$template.find(".awesomplete-label[readonly]").remove();
+		$template.find(".awesomplete-placeholder[readonly]").remove();
 		$template.find(".awesomplete-label").show();
 		$template.find(".listening").removeClass("listening");
 		$template.appendTo($insert);
