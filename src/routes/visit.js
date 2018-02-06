@@ -33,16 +33,19 @@ module.exports.get = [
 			`SELECT
 			visits.id as id,
 			visits.date as date,
+			visits.preparation_duration as preparation_duration,
 			visits.duration as duration,
 			visits.patient_count as patient_count,
 			visit_types.name as visit_type_name,
 			users.username as username,
+			company.username as company_username,
 			hospitals.name as hospital_name,
 			disciplines.name as discipline_name,
 			stations.name as station_name
 			FROM visits
 			LEFT JOIN visit_types ON visits.visit_type_id=visit_types.id
 			LEFT JOIN users ON visits.user_id=users.id
+			LEFT JOIN users as company ON visits.company_user_id=company.id
 			LEFT JOIN hospitals ON visits.hospital_id=hospitals.id
 			LEFT JOIN disciplines ON visits.discipline_id=disciplines.id
 			LEFT JOIN stations ON visits.station_id=stations.id
@@ -80,6 +83,8 @@ module.exports.get = [
 					drug,
 					problem,
 					suggestion,
+					history_entry,
+					advice,
 					comment,
 					substances.name as substance_name,
 					substances.atc_code as substance_atc_code,

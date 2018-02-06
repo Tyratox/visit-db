@@ -47,6 +47,7 @@ $(function() {
 			$this.closest(".repeatable").find(".repeat-el")[0]
 		).clone();
 		$template.find("input").val("");
+		$template.find("input[type='checkbox']").prop("checked", false);
 		$template.find("textarea").val("");
 		$template.find(".awesomplete-label[readonly]").remove();
 		$template.find(".awesomplete-placeholder[readonly]").remove();
@@ -116,6 +117,16 @@ $(function() {
 			alert("Der letzte Eintrag kann nicht entfernt werden!");
 		}
 	}
+	
+	function onSubmit(e) {
+		$(this)
+			.find("input[type='checkbox']:not(:checked)")
+			.attr("value", "false")
+			.attr("type", "hidden")
+			.prop("checked", true);
+		
+		return true;
+	}
 
 	function installListeners() {
 		$('[data-toggle="tooltip"]').tooltip();
@@ -146,6 +157,10 @@ $(function() {
 		$(".repeatable .remove-el")
 			.off("click", onRemoveElClick)
 			.on("click", onRemoveElClick);
+			
+		$("form")
+			.off("submit", onSubmit)
+			.on("submit", onSubmit);
 	}
 
 	installListeners();

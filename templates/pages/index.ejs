@@ -27,6 +27,24 @@
 							>
 						</div>
 						<div class="form-group">
+							<label for="company_username">
+								Begleitung
+							</label>
+							<input
+								type="text"
+								class="form-control awesomplete"
+								id="company_username"
+								name="company_username"
+								value="<%= locals.company_username ? company_username : '' %>"
+								placeholder="Gib deinen Benutzername / dein Kürzel ein"
+								data-autofirst="true"
+								data-parsley-type="alphanum"
+								data-parsley-minlength="7"
+								data-parsley-maxlength="10"
+								data-list="<%= users.map(u => u.username).join(',') %>"
+							>
+						</div>
+						<div class="form-group">
 							<label for="visit_type">Was wurde getan?</label>
 							<select class="custom-select form-control" name="visit_type" id="visit_type" required>
 								<option <%- locals.visitType ? '' : 'selected' %>>Wähle einen Visitentyp</option>
@@ -66,7 +84,20 @@
 							>
 						</div>
 						<div class="form-group">
-							<label for="date">Dauer</label>
+							<label for="preparation_duration">Vorbereitungszeit</label>
+							<input
+								type="text"
+								class="form-control"
+								id="preparation_duration"
+								name="preparation_duration"
+								value="<%= locals.preparation_duration === 0 ? preparation_duration : "0" %>"
+								placeholder="Gib hier die Dauer der Vorbereitungszeit in Minuten an"
+								required
+								pattern="[0-9]+"
+							>
+						</div>
+						<div class="form-group">
+							<label for="duration">Dauer</label>
 							<input
 								type="text"
 								class="form-control"

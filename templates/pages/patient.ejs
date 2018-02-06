@@ -142,6 +142,8 @@
 							drug,
 							problem,
 							suggestion,
+							history_entry,
+							advice,
 							comment,
 							substance_id,
 							intervention_problem_id,
@@ -272,6 +274,22 @@
 										</div>
 									</div>
 									<div class="col-12">
+										<div class="form-group">
+											<div class="form-check">
+												<label class="form-check-label">
+													<input class="form-check-input" type="checkbox" value="true" name="intervention_history_entry[]" ${history_entry ? "checked" : ""} >
+													Als Verlaufseintrag
+												</label>
+											</div>
+											<div class="form-check">
+												<label class="form-check-label">
+													<input class="form-check-input" type="checkbox" value="true" name="intervention_advice[]" ${advice ? "checked" : ""} >
+													Als Konsil
+												</label>
+											</div>
+										</div>
+									</div>
+									<div class="col-12">
 										<a class="btn btn-danger remove-el text-white">Entferne Intervention</a>
 									</div>
 								</div>
@@ -373,6 +391,22 @@
 												rows="5"
 												maxlength="2048"
 											></textarea>
+										</div>
+									</div>
+									<div class="col-12">
+										<div class="form-group">
+											<div class="form-check">
+												<label class="form-check-label">
+													<input class="form-check-input" type="checkbox" value="true" name="intervention_history_entry[]">
+													Als Verlaufseintrag
+												</label>
+											</div>
+											<div class="form-check">
+												<label class="form-check-label">
+													<input class="form-check-input" type="checkbox" value="true" name="intervention_advice[]">
+													Als Konsil
+												</label>
+											</div>
 										</div>
 									</div>
 									<div class="col-12">

@@ -47,6 +47,7 @@ module.exports.get = [
 				db,
 				`SELECT
 				users.username,
+				company.username as company_username,
 				visits.date,
 				visits.patient_count,
 				visits.visit_type_id as visitType,
@@ -56,6 +57,7 @@ module.exports.get = [
 				visits.discipline_id as discipline
 				FROM visits
 				LEFT JOIN users ON visits.user_id=users.id
+				LEFT JOIN users as company ON visits.company_user_id=company.id
 				LEFT JOIN stations ON visits.station_id=stations.id
 				WHERE visits.id=?
 				`,
@@ -84,6 +86,10 @@ module.exports.post = [
 			username: Joi.string()
 				.alphanum()
 				.required(),
+			company_username: Joi.string()
+				.alphanum()
+				.allow("")
+				.required(),
 			date: Joi.string()
 				.regex(
 					/[0-9]{1,2}\.[0-9]{1,2}\.([0-9]{4}|[0-9]{2})/
@@ -94,6 +100,10 @@ module.exports.post = [
 				.required(),
 			visit_type: Joi.number()
 				.positive()
+				.required(),
+			preparation_duration: Joi.number()
+				.positive()
+				.allow(0)
 				.required(),
 			duration: Joi.number()
 				.positive()
@@ -113,11 +123,13 @@ module.exports.post = [
 		}
 	}),
 	async (request, response, next) => {
-		const {
+		let {
 			username,
+			company_username,
 			date,
 			patient_count,
 			visit_type,
+			preparation_duration,
 			duration,
 			hospital,
 			station,
@@ -136,6 +148,7 @@ module.exports.post = [
 
 		//Find the right user
 		const userId = await findIdOrInsert(db, "users", "username", username),
+			companyUserId = company_username !== "" ? await findIdOrInsert(db, "users", "username", company_username) : null,
 			stationId = await findIdOrInsert(db, "stations", "name", station);
 
 		let visitId;
@@ -147,21 +160,25 @@ module.exports.post = [
 				db,
 				`UPDATE visits
 				SET date = ?,
+				preparation_duration = ?,
 				duration = ?,
 				patient_count = ?,
 				visit_type_id = ?,
 				user_id = ?,
+				company_user_id = ?,
 				hospital_id = ?,
 				discipline_id = ?,
 				station_id = ?
-				WHERE visits.id=?
+				WHERE visits.id = ?
 				`,
 				[
 					stringToUnixTimestamp(date),
+					preparation_duration,
 					duration,
 					patient_count,
 					visit_type,
 					userId,
+					companyUserId,
 					hospital,
 					discipline,
 					stationId,
@@ -175,20 +192,24 @@ module.exports.post = [
 				db,
 				`INSERT INTO visits(
 				date,
+				preparation_duration,
 				duration,
 				patient_count,
 				visit_type_id,
 				user_id,
+				company_user_id,
 				hospital_id,
 				discipline_id,
 				station_id
-			) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`,
+			) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 				[
 					stringToUnixTimestamp(date),
+					preparation_duration,
 					duration,
 					patient_count,
 					visit_type,
 					userId,
+					companyUserId,
 					hospital,
 					discipline,
 					stationId

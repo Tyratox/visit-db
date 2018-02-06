@@ -29,6 +29,14 @@
 						<td><%= visit.username %></td>
 					</tr>
 					<tr>
+						<td>Begleitung</td>
+						<td><%= visit.company_username %></td>
+					</tr>
+					<tr>
+						<td>Vorbereitungszeit</td>
+						<td><%= visit.preparation_duration %> Minuten</td>
+					</tr>
+					<tr>
 						<td>Dauer</td>
 						<td><%= visit.duration %> Minuten</td>
 					</tr>
@@ -120,6 +128,8 @@
 									reason_class,
 									type_class,
 									result_class,
+									advice,
+									history_entry,
 									comment
 								}) => {
 									return `
@@ -156,6 +166,14 @@
 													<tr>
 														<td>Resultat der Intervention</td>
 														<td>${result_class ? result_class : "-"}</td>
+													</tr>
+													<tr>
+														<td>Verlaufseintrag</td>
+														<td>${history_entry ? "Ja" : "Nein"}</td>
+													</tr>
+													<tr>
+														<td>Konsil</td>
+														<td>${advice ? "Ja" : "Nein"}</td>
 													</tr>
 													<tr>
 														<td>Kommentar</td>

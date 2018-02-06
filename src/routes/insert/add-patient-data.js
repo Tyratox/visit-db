@@ -102,6 +102,8 @@ module.exports.get = [
 				drug,
 				problem,
 				suggestion,
+				history_entry,
+				advice,
 				comment,
 				substance_id,
 				intervention_problem_id,
@@ -156,7 +158,8 @@ module.exports.post = [
 				Joi.string()
 					.max(2048)
 					.allow("")
-			), intervention_comment: Joi.array().items(
+			),
+			intervention_comment: Joi.array().items(
 				Joi.string()
 					.max(2048)
 					.allow("")
@@ -172,9 +175,11 @@ module.exports.post = [
 			intervention_result_id: Joi.array().items(
 				Joi.number()
 					.positive()
-					.allow("")
+					.allow(""),
 			),
-			intervention_type_id: Joi.array().items(Joi.number().positive())
+			intervention_type_id: Joi.array().items(Joi.number().positive()),
+			intervention_history_entry: Joi.array().items(Joi.string()),
+			intervention_advice: Joi.array().items(Joi.string())
 		},
 		query: {
 			patient_id: Joi.number().positive()
@@ -220,6 +225,12 @@ module.exports.post = [
 				: [],
 			intervention_comment = request.body.intervention_comment
 				? request.body.intervention_comment
+				: [],
+			intervention_history_entry = request.body.intervention_history_entry
+				? request.body.intervention_history_entry.map(b => b === "true")
+				: [],
+			intervention_advice = request.body.intervention_advice
+				? request.body.intervention_advice.map(b => b === "true")
 				: [];
 
 		if (
@@ -229,7 +240,9 @@ module.exports.post = [
 			intervention_substance_id.length !== intervention_problem_id.length ||
 			intervention_problem_id.length !== intervention_reason_id.length ||
 			intervention_reason_id.length !== intervention_result_id.length ||
-			intervention_result_id.length !== intervention_type_id.length
+			intervention_result_id.length !== intervention_type_id.length ||
+			intervention_type_id.length !== intervention_history_entry.length ||
+			intervention_history_entry.length !== intervention_advice.length
 		) {
 			return next(
 				new Error("The received intervention array length(s) are invalid")
@@ -317,6 +330,8 @@ module.exports.post = [
 								drug,
 								problem,
 								suggestion,
+								history_entry,
+								advice,
 								comment,
 								patient_id,
 								substance_id,
@@ -324,11 +339,13 @@ module.exports.post = [
 								intervention_reason_id,
 								intervention_type_id,
 								intervention_result_id
-							) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+							) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 								[
 									drug,
 									intervention_problem[index],
 									intervention_suggestion[index],
+									intervention_history_entry[index],
+									intervention_advice[index],
 									intervention_comment[index],
 									patientId,
 									intervention_substance_id[index]
