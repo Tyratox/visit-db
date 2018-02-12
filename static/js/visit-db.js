@@ -24,8 +24,12 @@ $(function() {
 				.show()
 				.focus();
 		});
-		
-		$readonly.closest(".form-group").next(".form-group").find("input").focus();
+
+		$readonly
+			.closest(".form-group")
+			.next(".form-group")
+			.find("input")
+			.focus();
 	}
 
 	function onPlaceholderClick(e) {
@@ -102,11 +106,11 @@ $(function() {
 			alert("Der letzte Eintrag kann nicht entfernt werden!");
 		}
 	}
-	
+
 	function onRemoveElClick(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		
+
 		var $this = $(e.currentTarget);
 		var $repeatable = $this.closest(".repeatable");
 		var $elements = $repeatable.find(".repeat-el");
@@ -117,14 +121,13 @@ $(function() {
 			alert("Der letzte Eintrag kann nicht entfernt werden!");
 		}
 	}
-	
+
 	function onSubmit(e) {
 		$(this)
 			.find("input[type='checkbox']:not(:checked)")
-			.attr("value", "false")
-			.attr("type", "hidden")
+			.attr("value", "stupidinternexexplorerbug")
 			.prop("checked", true);
-		
+
 		return true;
 	}
 
@@ -157,7 +160,7 @@ $(function() {
 		$(".repeatable .remove-el")
 			.off("click", onRemoveElClick)
 			.on("click", onRemoveElClick);
-			
+
 		$("form")
 			.off("submit", onSubmit)
 			.on("submit", onSubmit);

@@ -91,9 +91,7 @@ module.exports.post = [
 				.allow("")
 				.required(),
 			date: Joi.string()
-				.regex(
-					/[0-9]{1,2}\.[0-9]{1,2}\.([0-9]{4}|[0-9]{2})/
-				)
+				.regex(/[0-9]{1,2}\.[0-9]{1,2}\.([0-9]{4}|[0-9]{2})/)
 				.required(),
 			patient_count: Joi.number()
 				.positive()
@@ -148,7 +146,10 @@ module.exports.post = [
 
 		//Find the right user
 		const userId = await findIdOrInsert(db, "users", "username", username),
-			companyUserId = company_username !== "" ? await findIdOrInsert(db, "users", "username", company_username) : null,
+			companyUserId =
+				company_username !== ""
+					? await findIdOrInsert(db, "users", "username", company_username)
+					: null,
 			stationId = await findIdOrInsert(db, "stations", "name", station);
 
 		let visitId;
@@ -201,7 +202,7 @@ module.exports.post = [
 				hospital_id,
 				discipline_id,
 				station_id
-			) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+			) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 				[
 					stringToUnixTimestamp(date),
 					preparation_duration,
