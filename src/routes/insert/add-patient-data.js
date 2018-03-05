@@ -35,9 +35,9 @@ module.exports.get = [
 		const { patient_id: patientId } = request.query;
 
 		const substances = await loadAll(
-			db,
-			"SELECT id, atc_code, name FROM substances"
-		),
+				db,
+				"SELECT id, atc_code, name FROM substances"
+			),
 			caseTypes = await loadAll(
 				db,
 				"SELECT id, abbreviation, name FROM case_types"
@@ -52,7 +52,7 @@ module.exports.get = [
 			),
 			interventionResults = await loadAll(
 				db,
-				"SELECT id, name FROM intervention_results"
+				"SELECT id, name, 'order' FROM intervention_results"
 			),
 			interventionTypes = await loadAll(
 				db,
@@ -137,9 +137,7 @@ module.exports.post = [
 		body: {
 			case_number: Joi.string().required(),
 			date_of_birth: Joi.string()
-				.regex(
-					/[0-9]{1,2}\.[0-9]{1,2}\.([0-9]{4}|[0-9]{2})/
-				)
+				.regex(/[0-9]{1,2}\.[0-9]{1,2}\.([0-9]{4}|[0-9]{2})/)
 				.required(),
 			case_type: Joi.number()
 				.positive()
@@ -148,7 +146,9 @@ module.exports.post = [
 			gender: Joi.string()
 				.valid("male", "female")
 				.required(),
-			comment: Joi.string().max(2048).allow(""),
+			comment: Joi.string()
+				.max(2048)
+				.allow(""),
 			intervention_drug: Joi.array().items(
 				Joi.string()
 					.max(2048)
@@ -175,7 +175,7 @@ module.exports.post = [
 			intervention_result_id: Joi.array().items(
 				Joi.number()
 					.positive()
-					.allow(""),
+					.allow("")
 			),
 			intervention_type_id: Joi.array().items(Joi.number().positive()),
 			intervention_history_entry: Joi.array().items(Joi.string()),
@@ -200,8 +200,8 @@ module.exports.post = [
 		const { patient_id: idToUpdate } = request.query;
 
 		const intervention_drug = request.body.intervention_drug
-			? request.body.intervention_drug
-			: [],
+				? request.body.intervention_drug
+				: [],
 			intervention_problem = request.body.intervention_problem
 				? request.body.intervention_problem
 				: [],
@@ -299,7 +299,14 @@ module.exports.post = [
 				WHERE
 				id = ?
 			`,
-				[caseId, patient_number, gender, stringToUnixTimestamp(date_of_birth), comment, patientId]
+				[
+					caseId,
+					patient_number,
+					gender,
+					stringToUnixTimestamp(date_of_birth),
+					comment,
+					patientId
+				]
 			);
 		} else {
 			patientId = await insert(
@@ -316,7 +323,10 @@ module.exports.post = [
 			);
 		}
 
-		update(db, "UPDATE cases SET case_type_id = ? WHERE id = ?", [case_type, caseId])
+		update(db, "UPDATE cases SET case_type_id = ? WHERE id = ?", [
+			case_type,
+			caseId
+		])
 			.then(() => {
 				return remove(db, "DELETE FROM interventions WHERE patient_id = ?", [
 					patientId

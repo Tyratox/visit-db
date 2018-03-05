@@ -131,6 +131,12 @@ $(function() {
 		return true;
 	}
 
+	function onSelectChange(e) {
+		if (this.selectedIndex) {
+			self.focus();
+		}
+	}
+
 	function installListeners() {
 		$('[data-toggle="tooltip"]').tooltip();
 
@@ -146,7 +152,7 @@ $(function() {
 			.off("click", onPlaceholderClick)
 			.on("click", onPlaceholderClick);
 
-		$(".repeat a.btn")
+		$(".repeat.btn")
 			.off("click", onRepeatClick)
 			.on("click", onRepeatClick);
 
@@ -164,6 +170,10 @@ $(function() {
 		$("form")
 			.off("submit", onSubmit)
 			.on("submit", onSubmit);
+
+		$("select")
+			.off("change", onSelectChange)
+			.on("change", onSelectChange);
 	}
 
 	installListeners();
