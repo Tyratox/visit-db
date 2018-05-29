@@ -97,9 +97,9 @@ module.exports.post = [
 					rows.map(values =>
 						insert(
 							db,
-							`INSERT INTO ${table} (${keys.join(",")}) VALUES ('${values.join(
+							`INSERT INTO ${table} ('${keys.join(
 								"','"
-							)}')`
+							)}') VALUES ('${values.join("','")}')`
 						)
 					)
 				);

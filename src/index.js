@@ -38,7 +38,7 @@ try {
 				logger.log("info", "waiting 2000ms to quit..");
 				let waitTill = new Date(new Date().getTime() + 2000);
 
-				while (waitTill > new Date()) { }
+				while (waitTill > new Date()) {}
 				process.exit();
 			}
 		} catch (err) {
@@ -52,12 +52,10 @@ try {
 
 const { setupDbStructure } = require("./dbutils");
 setupDbStructure(process.cwd());
-
 const db = require("./db");
 const { errors: celebrateErrors } = require("celebrate");
 
 global.APP_ROOT = path.resolve(__dirname, "..");
-
 const express = require("express");
 const expressSession = require("express-session");
 const bodyParser = require("body-parser");
