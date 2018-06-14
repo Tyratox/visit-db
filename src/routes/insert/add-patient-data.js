@@ -52,7 +52,7 @@ module.exports.get = [
 			),
 			interventionResults = await loadAll(
 				db,
-				"SELECT id, name, 'order' FROM intervention_results"
+				"SELECT id, name, `order` FROM intervention_results"
 			),
 			interventionTypes = await loadAll(
 				db,
@@ -271,7 +271,7 @@ module.exports.post = [
 			return next(new Error("Invalid id (length)!"));
 		}
 
-		if (substance && !await exists(db, "substances", "id", substance)) {
+		if (substance && !(await exists(db, "substances", "id", substance))) {
 			return next(new Error("The received substance id is invalid!"));
 		}
 
